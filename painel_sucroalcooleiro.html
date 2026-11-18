@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Sucroalcooleiro — Alagoas</title>
+<style>
+:root{--verde:#1b9e77;--cinza:#555555;--bg:#f7f8fa;--card:#fff;--border:#ddd;--text:#222;--text2:#555;--header-bg:#1a1a2e;--header-text:#fff;--hover:#f0f0f0;--red:#c0392b;--blue:#2980b9;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;font-size:15px;color:var(--text)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);min-height:100vh;display:flex;flex-direction:column}
+header{background:var(--header-bg);color:var(--header-text);padding:16px;text-align:center}
+header h1{font-size:1.3rem;font-weight:600}
+header p{font-size:.82rem;opacity:.8;margin-top:4px}
+nav{display:flex;gap:0;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;padding:0 16px}
+nav button{padding:10px 18px;border:none;background:transparent;cursor:pointer;font-size:.88rem;font-weight:500;color:var(--text2);border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
+nav button.active{color:var(--header-bg);border-bottom-color:var(--header-bg);font-weight:700}
+nav button:hover{background:var(--hover)}
+.container{flex:1;padding:16px;max-width:1200px;margin:0 auto;width:100%}
+.tab{display:none}
+.tab.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.card .val{font-size:1.6rem;font-weight:700;margin:6px 0}
+.card .lbl{font-size:.78rem;color:var(--text2)}
+.card.polo{border-left:4px solid var(--cinza)}
+.card.baixa{border-left:4px solid var(--verde)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.controls input,.controls select{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:.88rem}
+.controls input{flex:1;min-width:200px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:.82rem}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee}
+th{background:#f4f4f4;cursor:pointer;user-select:none;position:sticky;top:0;white-space:nowrap;font-weight:600}
+th:hover{background:#e8e8e8}
+th .arrow{font-size:.7rem;margin-left:4px}
+tr:hover{background:var(--hover)}
+.table-wrap{max-height:60vh;overflow:auto;border:1px solid var(--border);border-radius:8px}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.72rem;font-weight:600;color:#fff}
+.badge.polo{background:var(--cinza)}
+.badge.baixa{background:var(--verde)}
+.search-mun{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.95rem;margin-bottom:16px}
+.ficha-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.ficha-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px}
+.ficha-card h3{font-size:.9rem;margin-bottom:10px;color:var(--text2)}
+.ind-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:.85rem}
+.ind-row:last-child{border:none}
+.up{color:#27ae60}
+.down{color:var(--red)}
+.stable{color:var(--text2)}
+.chart-container{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
+.chart-container h3{font-size:.9rem;margin-bottom:8px;color:var(--text2)}
+.chart-note{font-size:.72rem;color:var(--text2);margin-top:6px;font-style:italic}
+.warning{background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:10px 14px;font-size:.8rem;margin-bottom:12px;color:#856404}
+.canapi-note{background:#f8d7da;border:1px solid #f5c6cb;border-radius:6px;padding:10px 14px;font-size:.8rem;margin-bottom:12px;color:#721c24}
+.comp-sel{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.comp-sel select{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:.88rem;min-width:220px}
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.comp-col{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px}
+.comp-col h3{font-size:.95rem;margin-bottom:12px}
+.meth{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;line-height:1.7;font-size:.88rem}
+.meth h2{font-size:1.1rem;margin:20px 0 8px;color:var(--header-bg)}
+.meth h2:first-child{margin-top:0}
+.meth ul{margin:8px 0 8px 20px}
+.meth li{margin-bottom:4px}
+footer{background:var(--header-bg);color:var(--header-text);text-align:center;padding:14px 16px;font-size:.75rem;opacity:.9}
+.dropdown-wrap{position:relative}
+.dropdown-list{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;max-height:250px;overflow-y:auto;z-index:100;display:none}
+.dropdown-list.show{display:block}
+.dropdown-list div{padding:8px 14px;cursor:pointer;font-size:.88rem}
+.dropdown-list div:hover{background:var(--hover)}
+.median-bar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:.78rem}
+.median-bar .bar-bg{flex:1;height:8px;background:#eee;border-radius:4px;position:relative}
+.median-bar .bar-fill{height:100%;border-radius:4px;position:absolute;top:0;left:0}
+.median-bar .bar-mark{position:absolute;top:-4px;width:2px;height:16px;border-radius:1px}
+svg text{font-family:'Segoe UI',system-ui,sans-serif}
+.tooltip-box{position:absolute;background:rgba(0,0,0,.85);color:#fff;padding:6px 10px;border-radius:4px;font-size:.75rem;pointer-events:none;z-index:200;white-space:nowrap;display:none}
+@media(max-width:768px){
+ .ficha-grid{grid-template-columns:1fr}
+ .cards{grid-template-columns:1fr 1fr}
+ nav button{padding:8px 12px;font-size:.8rem}
+ .comp-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Painel Sucroalcooleiro — Municípios de Alagoas</h1>
+<p>Monitoramento da dependência do setor sucroalcooleiro e diversificação econômica (2018–2026)</p>
+</header>
+<nav id="nav">
+<button class="active" data-tab="estadual">Visão Estadual</button>
+<button data-tab="ficha">Ficha do Município</button>
+<button data-tab="comparador">Comparador</button>
+<button data-tab="metodologia">Metodologia</button>
+</nav>
+<div class="container">
+<div id="tooltip" class="tooltip-box"></div>
+
+<!-- TAB 1 -->
+<div id="tab-estadual" class="tab active">
+<div class="cards" id="summary-cards"></div>
+<div class="controls">
+<input type="text" id="tbl-search" placeholder="Buscar município…">
+<select id="tbl-filter">
+<option value="">Todos os grupos</option>
+<option value="Polo_Sucroalcooleiro">Polo Sucroalcooleiro</option>
+<option value="Baixa_Dependencia">Baixa Dependência</option>
+</select>
+</div>
+<div class="table-wrap">
+<table id="main-table">
+<thead><tr id="main-thead"></tr></thead>
+<tbody id="main-tbody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- TAB 2 -->
+<div id="tab-ficha" class="tab">
+<div class="dropdown-wrap">
+<input type="text" class="search-mun" id="ficha-search" placeholder="Digite o nome do município…" autocomplete="off">
+<div class="dropdown-list" id="ficha-dropdown"></div>
+</div>
+<div id="ficha-content"></div>
+</div>
+
+<!-- TAB 3 -->
+<div id="tab-comparador" class="tab">
+<p style="margin-bottom:12px;font-size:.88rem;color:var(--text2)">Selecione até 3 municípios para comparar lado a lado.</p>
+<div class="comp-sel">
+<select id="comp1"><option value="">— Município 1 —</option></select>
+<select id="comp2"><option value="">— Município 2 —</option></select>
+<select id="comp3"><option value="">— Município 3 —</option></select>
+</div>
+<div class="comp-grid" id="comp-grid"></div>
+</div>
+
+<!-- TAB 4 -->
+<div id="tab-metodologia" class="tab">
+<div class="meth">
+<h2>Fontes de dados</h2>
+<ul>
+<li><strong>RAIS (2018–2022)</strong>: Relação Anual de Informações Sociais, MTE/PDET. Inclui todos os vínculos formais (celetistas e estatutários).</li>
+<li><strong>Novo CAGED (2023–2026)</strong>: Cadastro Geral de Empregados e Desempregados, MTE/PDET. Inclui apenas vínculos celetistas (CLT).</li>
+<li><strong>2026</strong>: dados parciais, referentes ao período de janeiro a setembro.</li>
+</ul>
+
+<h2>Quebra de série</h2>
+<p>A RAIS e o Novo CAGED <strong>não são comparáveis em nível</strong>. A RAIS inclui servidores estatutários e o CAGED registra apenas celetistas. Isso explica a queda abrupta do estoque estadual de 578.837 (2022, RAIS) para 415.872 (2023, CAGED). Nos gráficos de evolução, as duas séries são apresentadas separadamente, com uma linha vertical indicando a quebra. <strong>Variações entre 2022 e 2023 não devem ser calculadas.</strong></p>
+
+<h2>Definição de setor sucroalcooleiro</h2>
+<p>O agrupamento "cana" inclui os seguintes CNAEs:</p>
+<ul>
+<li><strong>0113-0/00</strong> — Cultivo de cana-de-açúcar</li>
+<li><strong>1071-6/00</strong> — Fabricação de açúcar em bruto</li>
+<li><strong>1931-4/00</strong> — Fabricação de álcool</li>
+</ul>
+
+<h2>Classificação dos municípios</h2>
+<ul>
+<li><strong style="color:var(--cinza)">Polo Sucroalcooleiro</strong> (20 municípios): cana ≥ 10% dos vínculos formais em 2022.</li>
+<li><strong style="color:var(--verde)">Baixa Dependência</strong> (82 municípios): cana &lt; 10% dos vínculos formais em 2022.</li>
+</ul>
+
+<h2>Indicadores de concentração/diversificação</h2>
+<ul>
+<li><strong>HHI (Herfindahl–Hirschman)</strong>: soma dos quadrados das participações de cada atividade (CNAE) no emprego formal. Varia de 0 a 1; quanto mais alto, mais concentrada a economia.</li>
+<li><strong>Shannon (Entropia)</strong>: entropia da mesma distribuição. Quanto mais alto, mais diversificada a economia.</li>
+<li>Ambos os indicadores estão disponíveis apenas para o período 2018–2022 (RAIS).</li>
+</ul>
+
+<h2>Limitações e avisos</h2>
+<ul>
+<li>O <strong>HHI dos municípios pequenos</strong> tende a ser dominado pela administração pública, o que pode superestimar a concentração econômica.</li>
+<li>A <strong>informalidade</strong> não está incluída nos dados. Os indicadores refletem exclusivamente o mercado formal.</li>
+<li>O <strong>crescimento do emprego 2023–2026</strong> utiliza apenas dados do CAGED (celetistas) e portanto não é comparável com o nível da RAIS.</li>
+<li>Municípios com <strong>estoque inferior a 200 vínculos</strong> apresentam variações percentuais instáveis; os valores devem ser interpretados com cautela.</li>
+<li><strong>Canapi</strong>: não há dados de estoque CAGED disponíveis para 2023 e 2024. O município apresenta salto atípico em 2026 (de 147 para 1.241 vínculos).</li>
+<li>A <strong>remuneração média</strong> está expressa em salários mínimos vigentes no ano de referência.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<footer>Fontes: RAIS (2018–2022) e Novo CAGED (2023–2026), MTE/PDET. Elaboração própria.</footer>
+
+<script>
+// ===== DATA =====
+// municipios_consolidado: [id, nome, vincRais2022, canaVinc2022, pctCana2022, hhi2022, shannon2022, nSetores2022, remSM2022, grupo, vincRais2018, hhi2018, shannon2018, saldoCaged2023, estoqueCaged2023, saldoCaged2024, estoqueCaged2024, saldoCaged2025, estoqueCaged2025, saldoCaged2026, estoqueCaged2026, saldoAcum, crescPct]
+const MC=[
+[2700102,"Água Branca",1650,0,0,0.7912,0.69,33,2.1167,"Baixa_Dependencia",1336,0.8075,0.6423,5,205,10,214,25,239,21,260,61,3.7],
+[2700201,"Anadia",1640,1,0.061,0.6773,1.0656,52,1.6777,"Baixa_Dependencia",1426,0.4618,1.6327,-17,327,0,329,10,343,33,376,26,1.59],
+[2700300,"Arapiraca",49053,55,0.1121,0.0488,4.3529,489,1.7995,"Baixa_Dependencia",37738,0.0282,4.6087,2187,42027,2811,44853,1880,46768,618,47386,7496,15.28],
+[2700409,"Atalaia",6373,2171,34.0656,0.2951,1.9784,98,1.8557,"Polo_Sucroalcooleiro",5083,0.2761,2.0029,92,3531,276,3804,-58,3743,148,3891,458,7.19],
+[2700508,"Barra de Santo Antônio",1847,0,0,0.3562,1.7648,62,1.7052,"Baixa_Dependencia",1192,0.4062,1.7316,147,997,60,1056,7,1071,6,1077,220,11.91],
+[2700607,"Barra de São Miguel",2397,13,0.5423,0.176,2.4846,68,1.6552,"Baixa_Dependencia",2008,0.1564,2.5544,23,1822,3,1831,20,1832,24,1856,70,2.92],
+[2700706,"Batalha",1373,0,0,0.2807,2.3538,60,2.3595,"Baixa_Dependencia",1331,0.4704,1.7285,10,766,-23,743,18,763,67,830,72,5.24],
+[2700805,"Belém",837,0,0,0.6026,0.9356,20,1.3804,"Baixa_Dependencia",574,0.873,0.3649,24,225,-23,200,26,225,3,228,30,3.58],
+[2700904,"Belo Monte",795,0,0,0.8072,0.3834,7,1.5699,"Baixa_Dependencia",293,0.6731,0.5711,11,93,10,103,1,104,-2,102,20,2.52],
+[2701001,"Boca da Mata",2148,667,31.0521,0.2971,1.9458,71,2.1826,"Polo_Sucroalcooleiro",2091,0.3606,1.6678,19,1061,64,1124,66,1191,46,1237,195,9.08],
+[2701100,"Branquinha",1021,10,0.9794,0.7855,0.6467,25,1.4932,"Baixa_Dependencia",582,0.6801,0.8741,192,113,17,136,-53,82,5,87,161,15.77],
+[2701209,"Cacimbinhas",1586,1,0.0631,0.4684,1.1138,23,1.7547,"Baixa_Dependencia",1388,0.4809,0.9387,30,274,4,278,68,348,-13,335,89,5.61],
+[2701308,"Cajueiro",605,95,15.7025,0.0701,3.2061,63,1.4896,"Polo_Sucroalcooleiro",1381,0.4447,1.6704,43,665,36,703,-44,661,114,775,149,24.63],
+[2701357,"Campestre",554,36,6.4982,0.5342,1.2463,23,1.4556,"Baixa_Dependencia",621,0.6418,0.8668,-6,138,-4,134,11,145,-13,132,-12,-2.17],
+[2701407,"Campo Alegre",5616,3428,61.0399,0.404,1.6517,91,1.9332,"Polo_Sucroalcooleiro",4530,0.4366,1.3575,579,4954,149,5084,-415,4666,-253,4413,60,1.07],
+[2701506,"Campo Grande",518,0,0,0.7565,0.7167,18,1.6539,"Baixa_Dependencia",590,0.7722,0.6969,-9,60,3,62,16,77,2,79,12,2.32],
+[2701605,"Canapi",634,0,0,0.6786,0.9312,23,1.9902,"Baixa_Dependencia",598,0.8223,0.5563,4,null,-1,null,25,147,1094,1241,1122,176.97],
+[2701704,"Capela",1515,84,5.5446,0.3207,2.1828,66,1.8959,"Baixa_Dependencia",1229,0.3906,1.7976,13,685,61,746,156,900,-179,721,51,3.37],
+[2701803,"Carneiros",455,0,0,0.8173,0.549,17,2.0614,"Baixa_Dependencia",424,0.8516,0.435,14,49,13,62,-4,58,2,60,25,5.49],
+[2701902,"Chã Preta",395,0,0,0.2347,1.9716,19,1.901,"Baixa_Dependencia",477,0.7241,0.7799,78,238,-45,193,25,217,22,239,80,20.25],
+[2702009,"Coité do Nóia",459,0,0,0.5886,1.2427,30,2.0745,"Baixa_Dependencia",504,0.6681,0.9932,57,162,27,191,8,199,100,299,192,41.83],
+[2702108,"Colônia Leopoldina",2863,991,34.614,0.2686,1.8132,48,1.2532,"Polo_Sucroalcooleiro",1748,0.4375,1.4855,-202,1106,-230,878,-38,840,-94,746,-564,-19.7],
+[2702207,"Coqueiro Seco",622,0,0,0.8524,0.4495,15,1.8802,"Baixa_Dependencia",601,0.8431,0.39,-7,52,10,61,7,67,-1,66,9,1.45],
+[2702306,"Coruripe",13721,6641,48.4003,0.2944,2.1239,162,2.0505,"Polo_Sucroalcooleiro",11373,0.4305,1.7337,910,10461,367,10842,-321,10544,-226,10318,730,5.32],
+[2702355,"Craíbas",2099,1,0.0476,0.2384,2.0948,53,2.3725,"Baixa_Dependencia",1984,0.4797,1.4071,279,1492,-106,1385,-272,1113,53,1166,-46,-2.19],
+[2702405,"Delmiro Gouveia",5441,0,0,0.1781,3.2051,177,2.0214,"Baixa_Dependencia",4576,0.2863,2.6215,97,3293,324,3622,1462,5078,-69,5009,1814,33.34],
+[2702504,"Dois Riachos",499,0,0,0.7522,0.7137,19,2.0227,"Baixa_Dependencia",482,0.8493,0.4536,7,62,24,86,-3,83,28,111,56,11.22],
+[2702553,"Estrela de Alagoas",534,0,0,0.7543,0.6874,16,1.6668,"Baixa_Dependencia",702,0.8171,0.536,24,554,9,563,159,720,47,767,239,44.76],
+[2702603,"Feira Grande",1656,0,0,0.5062,1.3132,42,1.8998,"Baixa_Dependencia",955,0.5518,1.2866,-14,254,54,308,-7,303,-1,302,32,1.93],
+[2702702,"Feliz Deserto",517,7,1.354,0.4961,1.1787,20,1.6677,"Baixa_Dependencia",624,0.5861,1.0063,44,231,4,234,-27,206,26,232,47,9.09],
+[2702801,"Flexeiras",993,120,12.0846,0.4769,1.4081,40,1.2391,"Polo_Sucroalcooleiro",1180,0.5546,1.2013,-15,282,40,323,49,372,-11,361,63,6.34],
+[2702900,"Girau do Ponciano",3512,1,0.0285,0.7465,0.8913,66,1.5874,"Baixa_Dependencia",975,0.3748,2.057,46,478,6,485,-22,462,162,624,192,5.47],
+[2703007,"Ibateguara",984,62,6.3008,0.5269,1.4511,46,1.7917,"Baixa_Dependencia",709,0.5586,1.3621,1,276,5,280,11,291,-55,236,-38,-3.86],
+[2703106,"Igaci",1626,0,0,0.7308,0.8861,37,1.7671,"Baixa_Dependencia",1195,0.7356,0.8435,-5,262,9,271,-13,246,14,260,5,0.31],
+[2703205,"Igreja Nova",3612,2503,69.2968,0.5297,1.0386,40,1.6984,"Polo_Sucroalcooleiro",3624,0.5757,0.8792,436,3203,22,3224,-298,2927,-71,2856,89,2.46],
+[2703304,"Inhapi",679,0,0,0.668,1.0016,25,2.4011,"Baixa_Dependencia",703,0.7427,0.7616,-5,132,41,173,-38,135,-4,131,-6,-0.88],
+[2703403,"Jacaré dos Homens",226,0,0,0.7032,0.8054,14,1.8431,"Baixa_Dependencia",233,0.7118,0.7452,8,65,13,78,-32,47,-2,45,-13,-5.75],
+[2703502,"Jacuípe",585,77,13.1624,0.5677,0.9867,17,1.6863,"Polo_Sucroalcooleiro",468,0.4413,1.2862,10,168,-4,164,2,166,-18,148,-10,-1.71],
+[2703601,"Japaratinga",1846,2,0.1083,0.3658,1.4574,46,1.5469,"Baixa_Dependencia",806,0.2478,1.9409,428,1526,145,1666,155,1822,180,2002,908,49.19],
+[2703700,"Jaramataia",54,0,0,0.0933,2.5053,15,1.1704,"Baixa_Dependencia",540,0.9028,0.306,-11,43,-7,36,10,46,-11,35,-19,-35.19],
+[2703759,"Jequiá da Praia",1253,172,13.7271,0.5231,1.2117,35,1.6602,"Polo_Sucroalcooleiro",1329,0.478,1.2459,8,376,42,419,69,488,-23,465,96,7.66],
+[2703809,"Joaquim Gomes",1262,20,1.5848,0.3918,1.8608,51,2.0229,"Baixa_Dependencia",1582,0.6368,1.1731,11,543,-3,541,-102,440,41,481,-53,-4.2],
+[2703908,"Jundiá",498,15,3.012,0.6883,0.8613,18,1.4319,"Baixa_Dependencia",482,0.7704,0.6052,7,87,-4,83,6,90,-9,81,0,0],
+[2704005,"Junqueiro",2564,165,6.4353,0.1539,2.5992,83,1.5897,"Baixa_Dependencia",2497,0.3304,2.09,89,1882,-56,1827,108,1910,77,1987,218,8.5],
+[2704104,"Lagoa da Canoa",1173,0,0,0.2304,2.0558,50,1.6358,"Baixa_Dependencia",927,0.4154,1.5413,148,781,-60,728,45,775,-48,727,85,7.25],
+[2704203,"Limoeiro de Anadia",2179,5,0.2295,0.2712,1.9977,60,1.5788,"Baixa_Dependencia",1858,0.3831,1.6891,150,1362,48,1408,37,1446,72,1518,307,14.09],
+[2704302,"Maceió",283770,2169,0.7644,0.0438,4.6143,771,2.7384,"Baixa_Dependencia",248353,0.0595,4.4336,13561,223739,11712,235456,8347,244442,4977,249419,38597,13.6],
+[2704401,"Major Isidoro",1110,0,0,0.4689,1.6632,54,2.0523,"Baixa_Dependencia",959,0.5131,1.4722,7,358,59,415,1,416,5,421,72,6.49],
+[2704500,"Maragogi",6919,58,0.8383,0.1795,2.6436,140,1.6252,"Baixa_Dependencia",4988,0.1995,2.4878,488,5753,232,5987,555,6551,213,6764,1488,21.51],
+[2704609,"Maravilha",293,0,0,0.648,0.9774,17,2.189,"Baixa_Dependencia",325,0.6828,0.911,10,75,15,90,14,104,56,160,95,32.42],
+[2704708,"Marechal Deodoro",14781,1859,12.577,0.092,3.4857,224,2.3681,"Polo_Sucroalcooleiro",10205,0.1203,3.1876,473,11879,451,12333,797,13130,539,13669,2260,15.29],
+[2704807,"Maribondo",1425,0,0,0.427,1.8359,62,1.7085,"Baixa_Dependencia",896,0.3795,1.8403,67,509,-1,509,36,546,39,585,141,9.89],
+[2704906,"Mar Vermelho",380,0,0,0.7219,0.7467,13,1.5906,"Baixa_Dependencia",341,0.7356,0.6285,-5,54,24,78,41,119,-1,118,59,15.53],
+[2705002,"Mata Grande",992,0,0,0.5559,1.331,38,1.7293,"Baixa_Dependencia",770,0.6837,0.9111,-16,231,11,241,16,257,16,273,27,2.72],
+[2705101,"Matriz de Camaragibe",5133,2415,47.0485,0.3353,1.7305,91,1.8472,"Polo_Sucroalcooleiro",4183,0.3754,1.5891,73,3273,-54,3218,-145,3074,-221,2853,-347,-6.76],
+[2705200,"Messias",2226,38,1.7071,0.4494,1.7998,68,1.4194,"Baixa_Dependencia",1267,0.4478,1.7502,63,937,79,997,-2,998,65,1063,205,9.21],
+[2705309,"Minador do Negrão",568,0,0,0.9721,0.096,6,1.672,"Baixa_Dependencia",383,0.8989,0.3022,2,18,0,18,9,27,1,28,12,2.11],
+[2705408,"Monteirópolis",933,0,0,0.6462,0.9306,19,1.56,"Baixa_Dependencia",491,0.7945,0.5651,-51,535,65,381,312,687,66,753,392,42.02],
+[2705507,"Murici",3994,224,5.6084,0.2409,2.2891,106,1.7968,"Baixa_Dependencia",2808,0.3597,2.0466,319,2672,434,3110,51,3160,-24,3136,780,19.53],
+[2705606,"Novo Lino",1044,7,0.6705,0.3922,1.6391,41,1.5883,"Baixa_Dependencia",990,0.5329,1.2646,-51,468,-28,440,-36,404,33,437,-82,-7.85],
+[2705705,"Olho d'Água das Flores",2272,0,0,0.2945,2.4236,87,1.934,"Baixa_Dependencia",2016,0.3038,2.3307,50,904,154,1068,138,1207,122,1329,464,20.42],
+[2705804,"Olho d'Água do Casado",668,0,0,0.6783,0.877,22,2.0918,"Baixa_Dependencia",645,0.8466,0.4316,-24,86,8,94,-7,88,49,137,26,3.89],
+[2705903,"Olho d'Água Grande",284,0,0,0.865,0.387,9,1.6418,"Baixa_Dependencia",277,0.9087,0.2778,-9,8,0,7,1,8,1,9,-7,-2.46],
+[2706000,"Olivença",861,0,0,0.8666,0.3973,17,1.6773,"Baixa_Dependencia",684,0.8368,0.4659,9,79,3,83,14,97,-6,91,20,2.32],
+[2706109,"Ouro Branco",993,0,0,0.7323,0.7867,27,1.4693,"Baixa_Dependencia",487,0.6369,0.9642,31,186,12,198,4,225,200,425,247,24.87],
+[2706208,"Palestina",349,0,0,0.966,0.1098,5,2.0535,"Baixa_Dependencia",267,0.9777,0.074,-1,7,-1,6,3,9,-1,8,0,0],
+[2706307,"Palmeira dos Índios",8428,0,0,0.1337,3.4699,228,1.7213,"Baixa_Dependencia",7920,0.1954,3.1112,68,5844,-275,5557,1339,7011,124,7135,1256,14.9],
+[2706406,"Pão de Açúcar",1176,0,0,0.4958,1.4454,45,1.8034,"Baixa_Dependencia",2396,0.7398,0.7932,-33,351,23,374,33,405,10,415,33,2.81],
+[2706422,"Pariconha",517,0,0,0.7768,0.6274,15,2.2222,"Baixa_Dependencia",676,0.8642,0.3903,-8,63,21,84,1,85,-2,83,12,2.32],
+[2706448,"Paripueira",1539,22,1.4295,0.0888,3.1006,87,1.4157,"Baixa_Dependencia",1085,0.0997,2.9256,53,1161,38,1202,32,1234,150,1384,273,17.74],
+[2706505,"Passo de Camaragibe",2282,12,0.5259,0.4709,1.5502,52,1.6062,"Baixa_Dependencia",1083,0.5188,1.4664,138,912,40,951,56,1014,69,1083,303,13.28],
+[2706604,"Paulo Jacinto",821,0,0,0.8219,0.576,24,1.6061,"Baixa_Dependencia",571,0.7798,0.7266,-8,88,17,105,-6,100,16,116,19,2.31],
+[2706703,"Penedo",7780,846,10.874,0.1401,3.2625,199,2.2372,"Polo_Sucroalcooleiro",6763,0.1642,3.2239,347,5425,563,5982,560,6537,434,6971,1904,24.47],
+[2706802,"Piaçabuçu",834,0,0,0.4275,1.7495,45,1.8681,"Baixa_Dependencia",1029,0.65,1.1047,11,356,-2,352,-64,282,-25,257,-80,-9.59],
+[2706901,"Pilar",5136,131,2.5506,0.1658,3.0609,160,2.4141,"Baixa_Dependencia",4347,0.2185,2.6536,40,3435,345,3795,197,3992,9,4001,591,11.51],
+[2707008,"Pindoba",448,7,1.5625,0.7884,0.5731,14,1.5024,"Baixa_Dependencia",379,0.7991,0.5138,-1,48,2,50,6,56,8,64,15,3.35],
+[2707107,"Piranhas",1981,0,0,0.2614,2.3567,73,2.1166,"Baixa_Dependencia",2706,0.6284,1.1676,47,1016,103,1117,186,1303,48,1351,384,19.38],
+[2707206,"Poço das Trincheiras",677,0,0,0.8774,0.4007,17,2.2298,"Baixa_Dependencia",727,0.9037,0.3145,14,70,-20,55,14,69,37,106,45,6.65],
+[2707305,"Porto Calvo",1602,220,13.7328,0.0801,3.3875,104,1.6961,"Polo_Sucroalcooleiro",3585,0.2844,2.016,123,1315,22,1338,155,1483,-47,1436,253,15.79],
+[2707404,"Porto de Pedras",1653,89,5.3842,0.1721,2.3269,57,1.5693,"Baixa_Dependencia",928,0.3551,1.5896,39,1354,297,1649,350,2001,171,2172,857,51.85],
+[2707503,"Porto Real do Colégio",802,0,0,0.607,1.1964,34,2.3009,"Baixa_Dependencia",723,0.623,1.1336,32,330,16,347,-48,302,0,302,0,0],
+[2707602,"Quebrangulo",959,0,0,0.742,0.8012,32,1.9588,"Baixa_Dependencia",671,0.6773,0.9582,26,159,5,164,12,176,18,194,61,6.36],
+[2707701,"Rio Largo",18602,7443,40.0118,0.2077,2.7114,217,1.8631,"Polo_Sucroalcooleiro",14784,0.286,2.3342,246,14312,193,14515,38,14553,-584,13969,-107,-0.58],
+[2707800,"Roteiro",872,100,11.4679,0.404,1.3447,22,1.4921,"Polo_Sucroalcooleiro",714,0.5751,1.0227,63,442,26,467,27,495,28,523,144,16.51],
+[2707909,"Santa Luzia do Norte",1002,0,0,0.294,1.7711,32,1.8967,"Baixa_Dependencia",805,0.2115,2.0968,14,514,-5,508,54,563,-9,554,54,5.39],
+[2708006,"Santana do Ipanema",5777,0,0,0.1469,3.115,149,2.3538,"Baixa_Dependencia",4339,0.1304,3.126,212,3856,224,4079,92,4173,175,4348,703,12.17],
+[2708105,"Santana do Mundaú",963,0,0,0.7428,0.7305,24,1.6841,"Baixa_Dependencia",837,0.7895,0.6331,23,135,-2,132,-3,129,-1,128,17,1.77],
+[2708204,"São Brás",451,0,0,0.8319,0.4798,13,2.0314,"Baixa_Dependencia",413,0.7732,0.5662,-2,33,7,40,0,40,12,52,17,3.77],
+[2708303,"São José da Laje",6241,4836,77.4876,0.6177,0.9703,64,1.4213,"Polo_Sucroalcooleiro",6178,0.671,0.7649,17,5205,37,5242,22,5264,-86,5178,-10,-0.16],
+[2708402,"São José da Tapera",3309,0,0,0.6596,1.1285,64,1.9589,"Baixa_Dependencia",2076,0.4817,1.4178,96,760,129,891,486,1375,-196,1179,515,15.56],
+[2708501,"São Luís do Quitunde",7994,5554,69.4771,0.517,1.2748,90,1.7382,"Polo_Sucroalcooleiro",8136,0.5232,1.1798,382,6938,-16,6921,-499,6425,-502,5923,-635,-7.94],
+[2708600,"São Miguel dos Campos",12651,4853,38.3606,0.1771,2.8047,194,1.8393,"Polo_Sucroalcooleiro",10662,0.1797,2.7472,-218,9931,469,10383,-237,10122,-453,9669,-439,-3.47],
+[2708709,"São Miguel dos Milagres",2339,1,0.0428,0.2456,2.0301,49,1.6117,"Baixa_Dependencia",1141,0.3392,1.6916,161,1534,237,1778,248,2042,6,2048,652,27.88],
+[2708808,"São Sebastião",2317,55,2.3738,0.1965,2.8452,84,1.8647,"Baixa_Dependencia",1894,0.3596,2.1286,-71,1417,112,1500,139,1620,55,1675,235,10.14],
+[2708907,"Satuba",2158,42,1.9462,0.2375,2.4139,84,2.1951,"Baixa_Dependencia",1536,0.2008,2.5137,53,1086,27,1107,105,1209,70,1279,255,11.82],
+[2708956,"Senador Rui Palmeira",706,0,0,0.8226,0.5549,19,2.0585,"Baixa_Dependencia",607,0.7786,0.6558,13,84,19,102,19,121,-4,117,47,6.66],
+[2709004,"Tanque d'Arca",373,0,0,0.7148,0.7303,15,2.1821,"Baixa_Dependencia",392,0.7329,0.7534,-9,66,1,68,-9,59,41,100,24,6.43],
+[2709103,"Taquarana",1229,2,0.1627,0.4983,1.6415,57,1.9904,"Baixa_Dependencia",884,0.5597,1.4765,36,419,58,478,63,540,3,543,160,13.02],
+[2709152,"Teotônio Vilela",3839,419,10.9143,0.0982,3.2892,126,1.9277,"Polo_Sucroalcooleiro",4994,0.2836,2.0737,290,2811,59,2815,250,3055,-88,2967,511,13.31],
+[2709202,"Traipu",2012,0,0,0.927,0.2615,23,1.6941,"Baixa_Dependencia",1541,0.9438,0.1987,1,74,0,73,-10,63,-3,60,-12,-0.6],
+[2709301,"União dos Palmares",5450,218,4,0.1128,3.4883,169,1.9032,"Baixa_Dependencia",5027,0.1221,3.4302,99,3693,233,3924,104,4021,287,4308,723,13.27],
+[2709400,"Viçosa",2453,2,0.0815,0.2088,2.6498,88,1.9749,"Baixa_Dependencia",2425,0.2759,2.345,61,1501,44,1545,110,1653,137,1790,352,14.35]
+];
+
+// painel_completo: [ano, id_mun, nome, vincRais, canaVinc, pctCana, hhi, shannon, nSetores, remSM, fonte, estoqueUnif, admCaged, deslCaged, saldoCaged, varRelCaged, estoqueFinalCaged, grupo]
+const PC=[
+[2018,2700102,"Água Branca",1336,0,0,0.8075,0.6423,34,1.865,"RAIS",1336,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700102,"Água Branca",1258,0,0,0.8006,0.651,34,1.8311,"RAIS",1258,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700102,"Água Branca",1362,0,0,0.8058,0.6366,33,1.9161,"RAIS",1362,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700102,"Água Branca",1388,0,0,0.8029,0.6373,33,1.9121,"RAIS",1388,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700102,"Água Branca",1650,0,0,0.7912,0.69,33,2.1167,"RAIS",1650,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700102,"Água Branca",null,null,null,null,null,null,null,"CAGED",205,66,61,5,0.9862,205,"Baixa_Dependencia"],
+[2024,2700102,"Água Branca",null,null,null,null,null,null,null,"CAGED",214,116,106,10,1.3316,214,"Baixa_Dependencia"],
+[2025,2700102,"Água Branca",null,null,null,null,null,null,null,"CAGED",239,95,70,25,3.2895,239,"Baixa_Dependencia"],
+[2026,2700102,"Água Branca",null,null,null,null,null,null,null,"CAGED",260,74,53,21,8.7866,260,"Baixa_Dependencia"],
+[2018,2700201,"Anadia",1426,3,0.2104,0.4618,1.6327,50,1.6094,"RAIS",1426,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700201,"Anadia",1215,0,0,0.5776,1.3503,43,1.6767,"RAIS",1215,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700201,"Anadia",1342,2,0.149,0.5469,1.3819,45,1.6179,"RAIS",1342,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700201,"Anadia",1435,3,0.2091,0.6439,1.118,45,1.6016,"RAIS",1435,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700201,"Anadia",1640,1,0.061,0.6773,1.0656,52,1.6777,"RAIS",1640,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700201,"Anadia",null,null,null,null,null,null,null,"CAGED",327,90,107,-17,-2.4286,327,"Baixa_Dependencia"],
+[2024,2700201,"Anadia",null,null,null,null,null,null,null,"CAGED",329,86,86,0,0,329,"Baixa_Dependencia"],
+[2025,2700201,"Anadia",null,null,null,null,null,null,null,"CAGED",343,118,108,10,1.1628,343,"Baixa_Dependencia"],
+[2026,2700201,"Anadia",null,null,null,null,null,null,null,"CAGED",376,152,119,33,9.621,376,"Baixa_Dependencia"],
+[2018,2700300,"Arapiraca",37738,43,0.1139,0.0282,4.6087,459,1.648,"RAIS",37738,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700300,"Arapiraca",36803,36,0.0978,0.0286,4.5789,442,1.5994,"RAIS",36803,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700300,"Arapiraca",36939,40,0.1083,0.0285,4.5806,457,1.5328,"RAIS",36939,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700300,"Arapiraca",42647,57,0.1337,0.0472,4.3438,457,1.5598,"RAIS",42647,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700300,"Arapiraca",49053,55,0.1121,0.0488,4.3529,489,1.7995,"RAIS",49053,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700300,"Arapiraca",null,null,null,null,null,null,null,"CAGED",42027,17577,15390,2187,5.8424,42027,"Baixa_Dependencia"],
+[2024,2700300,"Arapiraca",null,null,null,null,null,null,null,"CAGED",44853,20637,17826,2811,6.6324,44853,"Baixa_Dependencia"],
+[2025,2700300,"Arapiraca",null,null,null,null,null,null,null,"CAGED",46768,21077,19197,1880,4.1586,46768,"Baixa_Dependencia"],
+[2026,2700300,"Arapiraca",null,null,null,null,null,null,null,"CAGED",47386,15786,15168,618,1.3214,47386,"Baixa_Dependencia"],
+[2018,2700409,"Atalaia",5083,2384,46.9014,0.2761,2.0029,79,1.6674,"RAIS",5083,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2019,2700409,"Atalaia",4296,2138,49.7672,0.2765,2.0642,84,1.74,"RAIS",4296,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2020,2700409,"Atalaia",4194,2120,50.5484,0.2739,2.0764,79,1.646,"RAIS",4194,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2021,2700409,"Atalaia",5372,2069,38.5145,0.3045,1.8457,82,1.8132,"RAIS",5372,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2022,2700409,"Atalaia",6373,2171,34.0656,0.2951,1.9784,98,1.8557,"RAIS",6373,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2023,2700409,"Atalaia",null,null,null,null,null,null,null,"CAGED",3531,2178,2086,92,2.7744,3531,"Polo_Sucroalcooleiro"],
+[2024,2700409,"Atalaia",null,null,null,null,null,null,null,"CAGED",3804,2481,2205,276,7.8121,3804,"Polo_Sucroalcooleiro"],
+[2025,2700409,"Atalaia",null,null,null,null,null,null,null,"CAGED",3743,2264,2322,-58,-1.5239,3743,"Polo_Sucroalcooleiro"],
+[2026,2700409,"Atalaia",null,null,null,null,null,null,null,"CAGED",3891,2267,2119,148,3.954,3891,"Polo_Sucroalcooleiro"],
+[2018,2700508,"Barra de Santo Antônio",1192,107,8.9765,0.4062,1.7316,43,1.7483,"RAIS",1192,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700508,"Barra de Santo Antônio",1147,98,8.544,0.4192,1.6813,43,1.7015,"RAIS",1147,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700508,"Barra de Santo Antônio",1086,95,8.7477,0.4203,1.7343,49,1.7441,"RAIS",1086,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700508,"Barra de Santo Antônio",1073,82,7.6421,0.2803,2.1727,51,1.7183,"RAIS",1073,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700508,"Barra de Santo Antônio",1847,0,0,0.3562,1.7648,62,1.7052,"RAIS",1847,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700508,"Barra de Santo Antônio",null,null,null,null,null,null,null,"CAGED",997,474,327,147,15.8576,997,"Baixa_Dependencia"],
+[2024,2700508,"Barra de Santo Antônio",null,null,null,null,null,null,null,"CAGED",1056,640,580,60,4.1494,1056,"Baixa_Dependencia"],
+[2025,2700508,"Barra de Santo Antônio",null,null,null,null,null,null,null,"CAGED",1071,544,537,7,0.4651,1071,"Baixa_Dependencia"],
+[2026,2700508,"Barra de Santo Antônio",null,null,null,null,null,null,null,"CAGED",1077,457,451,6,0.5602,1077,"Baixa_Dependencia"],
+[2018,2700607,"Barra de São Miguel",2008,23,1.1454,0.1564,2.5544,60,1.5638,"RAIS",2008,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700607,"Barra de São Miguel",1712,28,1.6355,0.1544,2.4986,59,1.5251,"RAIS",1712,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700607,"Barra de São Miguel",1418,27,1.9041,0.1348,2.5986,52,1.4021,"RAIS",1418,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700607,"Barra de São Miguel",1725,15,0.8696,0.1852,2.4505,55,1.5037,"RAIS",1725,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700607,"Barra de São Miguel",2397,13,0.5423,0.176,2.4846,68,1.6552,"RAIS",2397,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700607,"Barra de São Miguel",null,null,null,null,null,null,null,"CAGED",1822,744,721,23,1.6788,1822,"Baixa_Dependencia"],
+[2024,2700607,"Barra de São Miguel",null,null,null,null,null,null,null,"CAGED",1831,794,791,3,0.1585,1831,"Baixa_Dependencia"],
+[2025,2700607,"Barra de São Miguel",null,null,null,null,null,null,null,"CAGED",1832,917,897,20,1.0515,1832,"Baixa_Dependencia"],
+[2026,2700607,"Barra de São Miguel",null,null,null,null,null,null,null,"CAGED",1856,743,719,24,1.31,1856,"Baixa_Dependencia"],
+[2018,2700706,"Batalha",1331,0,0,0.4704,1.7285,51,1.5121,"RAIS",1331,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700706,"Batalha",1349,0,0,0.472,1.7341,53,1.6728,"RAIS",1349,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700706,"Batalha",1303,0,0,0.4365,1.8316,54,1.9493,"RAIS",1303,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700706,"Batalha",1177,0,0,0.333,2.1343,50,2.0197,"RAIS",1177,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700706,"Batalha",1373,0,0,0.2807,2.3538,60,2.3595,"RAIS",1373,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700706,"Batalha",null,null,null,null,null,null,null,"CAGED",766,340,330,10,1.8519,766,"Baixa_Dependencia"],
+[2024,2700706,"Batalha",null,null,null,null,null,null,null,"CAGED",743,276,299,-23,-3.6392,743,"Baixa_Dependencia"],
+[2025,2700706,"Batalha",null,null,null,null,null,null,null,"CAGED",763,296,278,18,2.9557,763,"Baixa_Dependencia"],
+[2026,2700706,"Batalha",null,null,null,null,null,null,null,"CAGED",830,413,346,67,8.7811,830,"Baixa_Dependencia"],
+[2018,2700805,"Belém",574,0,0,0.873,0.3649,12,1.5045,"RAIS",574,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700805,"Belém",563,0,0,0.877,0.3692,13,1.6424,"RAIS",563,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700805,"Belém",652,0,0,0.8872,0.3598,14,1.5608,"RAIS",652,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700805,"Belém",657,0,0,0.8403,0.4976,17,1.5787,"RAIS",657,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700805,"Belém",837,0,0,0.6026,0.9356,20,1.3804,"RAIS",837,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700805,"Belém",null,null,null,null,null,null,null,"CAGED",225,243,219,24,8.0268,225,"Baixa_Dependencia"],
+[2024,2700805,"Belém",null,null,null,null,null,null,null,"CAGED",200,144,167,-23,-5.1802,200,"Baixa_Dependencia"],
+[2025,2700805,"Belém",null,null,null,null,null,null,null,"CAGED",225,130,104,26,6.2053,225,"Baixa_Dependencia"],
+[2026,2700805,"Belém",null,null,null,null,null,null,null,"CAGED",228,108,105,3,1.3333,228,"Baixa_Dependencia"],
+[2018,2700904,"Belo Monte",293,0,0,0.6731,0.5711,6,1.819,"RAIS",293,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2700904,"Belo Monte",342,0,0,0.6981,0.5436,6,1.889,"RAIS",342,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2700904,"Belo Monte",364,0,0,0.6775,0.5655,6,1.9239,"RAIS",364,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2700904,"Belo Monte",373,0,0,0.5988,0.7613,8,1.8858,"RAIS",373,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2700904,"Belo Monte",795,0,0,0.8072,0.3834,7,1.5699,"RAIS",795,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2700904,"Belo Monte",null,null,null,null,null,null,null,"CAGED",93,20,9,11,11.7021,93,"Baixa_Dependencia"],
+[2024,2700904,"Belo Monte",null,null,null,null,null,null,null,"CAGED",103,24,14,10,2.3697,103,"Baixa_Dependencia"],
+[2025,2700904,"Belo Monte",null,null,null,null,null,null,null,"CAGED",104,15,14,1,0.2315,104,"Baixa_Dependencia"],
+[2026,2700904,"Belo Monte",null,null,null,null,null,null,null,"CAGED",102,6,8,-2,-1.9231,102,"Baixa_Dependencia"]
+];
+
+// Due to file size constraints, we'll generate remaining PC data from MC
+// For the remaining municipalities, build PC from the raw CSV data pattern
+// Actually, let's build a function that creates the time series from MC + available info
+
+// We need the full painel data. Let me build it programmatically from both sources.
+// The MC has 2018 and 2022 RAIS data plus 2023-2026 CAGED.
+// For intermediate years we need the full painel. Let me embed ALL rows.
+
+// I'll store the rest of PC inline - continuing from Belo Monte
+const PC2=[
+[2018,2701001,"Boca da Mata",2091,612,29.2683,0.3606,1.6678,60,1.7377,"RAIS",2091,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2019,2701001,"Boca da Mata",2160,644,29.8148,0.3489,1.7168,61,1.6369,"RAIS",2160,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2020,2701001,"Boca da Mata",2014,635,31.5293,0.3432,1.7076,60,1.6743,"RAIS",2014,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2021,2701001,"Boca da Mata",1994,600,30.0903,0.3337,1.7603,62,1.7318,"RAIS",1994,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2022,2701001,"Boca da Mata",2148,667,31.0521,0.2971,1.9458,71,2.1826,"RAIS",2148,null,null,null,null,null,"Polo_Sucroalcooleiro"],
+[2023,2701001,"Boca da Mata",null,null,null,null,null,null,null,"CAGED",1061,459,440,19,1.7336,1061,"Polo_Sucroalcooleiro"],
+[2024,2701001,"Boca da Mata",null,null,null,null,null,null,null,"CAGED",1124,538,474,64,5.4608,1124,"Polo_Sucroalcooleiro"],
+[2025,2701001,"Boca da Mata",null,null,null,null,null,null,null,"CAGED",1191,689,623,66,5.3441,1191,"Polo_Sucroalcooleiro"],
+[2026,2701001,"Boca da Mata",null,null,null,null,null,null,null,"CAGED",1237,439,393,46,3.8623,1237,"Polo_Sucroalcooleiro"],
+[2018,2701100,"Branquinha",582,7,1.2027,0.6801,0.8741,22,1.889,"RAIS",582,null,null,null,null,null,"Baixa_Dependencia"],
+[2019,2701100,"Branquinha",557,3,0.5386,0.6116,1.0202,24,1.8557,"RAIS",557,null,null,null,null,null,"Baixa_Dependencia"],
+[2020,2701100,"Branquinha",482,0,0,0.8566,0.4655,18,1.8524,"RAIS",482,null,null,null,null,null,"Baixa_Dependencia"],
+[2021,2701100,"Branquinha",565,2,0.354,0.8,0.6157,20,1.7328,"RAIS",565,null,null,null,null,null,"Baixa_Dependencia"],
+[2022,2701100,"Branquinha",1021,10,0.9794,0.7855,0.6467,25,1.4932,"RAIS",1021,null,null,null,null,null,"Baixa_Dependencia"],
+[2023,2701100,"Branquinha",null,null,null,null,null,null,null,"CAGED",113,282,90,192,133.3333,113,"Baixa_Dependencia"],
+[2024,2701100,"Branquinha",null,null,null,null,null,null,null,"CAGED",136,70,53,17,2.2636,136,"Baixa_Dependencia"],
+[2025,2701100,"Branquinha",null,null,null,null,null,null,null,"CAGED",82,32,85,-53,-6.8475,82,"Baixa_Dependencia"],
+[2026,2701100,"Branquinha",null,null,null,null,null,null,null,"CAGED",87,29,24,5,6.0976,87,"Baixa_Dependencia"]
+];
+
+// This approach of embedding every single row is too verbose for 918 rows.
+// Instead, let's parse the data more efficiently: embed painel as a compact string and parse it.
+// But actually, the simplest approach: for the evolution chart and ficha, we really just need
+// estoque_unificado per year per municipality. Let's build that from MC + a compact structure.
+
+// For each municipality, store [rais2018..rais2022, caged2023..caged2026] as estoque_unificado
+// Plus the RAIS-year indicators (vinculos, pctCana, hhi, shannon, nSetores, remSM)
+
+// PAINEL DATA: compact format - keyed by id_municipio
+// For each mun: { rais: [[vincRais, canaVinc, pctCana, hhi, shannon, nSetores, remSM, estoqueUnif] x5 (2018-2022)], caged: [[estoque, adm, desl, saldo, varRel, estFinal] x4 (2023-2026)] }
+// Let's use the raw CSV data embedded as a string and parse it
+
+const PAINEL_RAW = `2018,2700102,1336,0,0,0.8075,0.6423,34,1.865,1336
+2019,2700102,1258,0,0,0.8006,0.651,34,1.8311,1258
+2020,2700102,1362,0,0,0.8058,0.6366,33,1.9161,1362
+2021,2700102,1388,0,0,0.8029,0.6373,33,1.9121,1388
+2022,2700102,1650,0,0,0.7912,0.69,33,2.1167,1650
+2023,2700102,,,,,,,,205
+2024,2700102,,,,,,,,214
+2025,2700102,,,,,,,,239
+2026,2700102,,,,,,,,260
+2018,2700201,1426,3,0.2104,0.4618,1.6327,50,1.6094,1426
+2019,2700201,1215,0,0,0.5776,1.3503,43,1.6767,1215
+2020,2700201,1342,2,0.149,0.5469,1.3819,45,1.6179,1342
+2021,2700201,1435,3,0.2091,0.6439,1.118,45,1.6016,1435
+2022,2700201,1640,1,0.061,0.6773,1.0656,52,1.6777,1640
+2023,2700201,,,,,,,,327
+2024,2700201,,,,,,,,329
+2025,2700201,,,,,,,,343
+2026,2700201,,,,,,,,376
+2018,2700300,37738,43,0.1139,0.0282,4.6087,459,1.648,37738
+2019,2700300,36803,36,0.0978,0.0286,4.5789,442,1.5994,36803
+2020,2700300,36939,40,0.1083,0.0285,4.5806,457,1.5328,36939
+2021,2700300,42647,57,0.1337,0.0472,4.3438,457,1.5598,42647
+2022,2700300,49053,55,0.1121,0.0488,4.3529,489,1.7995,49053
+2023,2700300,,,,,,,,42027
+2024,2700300,,,,,,,,44853
+2025,2700300,,,,,,,,46768
+2026,2700300,,,,,,,,47386
+2018,2700409,5083,2384,46.9014,0.2761,2.0029,79,1.6674,5083
+2019,2700409,4296,2138,49.7672,0.2765,2.0642,84,1.74,4296
+2020,2700409,4194,2120,50.5484,0.2739,2.0764,79,1.646,4194
+2021,2700409,5372,2069,38.5145,0.3045,1.8457,82,1.8132,5372
+2022,2700409,6373,2171,34.0656,0.2951,1.9784,98,1.8557,6373
+2023,2700409,,,,,,,,3531
+2024,2700409,,,,,,,,3804
+2025,2700409,,,,,,,,3743
+2026,2700409,,,,,,,,3891
+2018,2700508,1192,107,8.9765,0.4062,1.7316,43,1.7483,1192
+2019,2700508,1147,98,8.544,0.4192,1.6813,43,1.7015,1147
+2020,2700508,1086,95,8.7477,0.4203,1.7343,49,1.7441,1086
+2021,2700508,1073,82,7.6421,0.2803,2.1727,51,1.7183,1073
+2022,2700508,1847,0,0,0.3562,1.7648,62,1.7052,1847
+2023,2700508,,,,,,,,997
+2024,2700508,,,,,,,,1056
+2025,2700508,,,,,,,,1071
+2026,2700508,,,,,,,,1077
+2018,2700607,2008,23,1.1454,0.1564,2.5544,60,1.5638,2008
+2019,2700607,1712,28,1.6355,0.1544,2.4986,59,1.5251,1712
+2020,2700607,1418,27,1.9041,0.1348,2.5986,52,1.4021,1418
+2021,2700607,1725,15,0.8696,0.1852,2.4505,55,1.5037,1725
+2022,2700607,2397,13,0.5423,0.176,2.4846,68,1.6552,2397
+2023,2700607,,,,,,,,1822
+2024,2700607,,,,,,,,1831
+2025,2700607,,,,,,,,1832
+2026,2700607,,,,,,,,1856
+2018,2700706,1331,0,0,0.4704,1.7285,51,1.5121,1331
+2019,2700706,1349,0,0,0.472,1.7341,53,1.6728,1349
+2020,2700706,1303,0,0,0.4365,1.8316,54,1.9493,1303
+2021,2700706,1177,0,0,0.333,2.1343,50,2.0197,1177
+2022,2700706,1373,0,0,0.2807,2.3538,60,2.3595,1373
+2023,2700706,,,,,,,,766
+2024,2700706,,,,,,,,743
+2025,2700706,,,,,,,,763
+2026,2700706,,,,,,,,830
+2018,2700805,574,0,0,0.873,0.3649,12,1.5045,574
+2019,2700805,563,0,0,0.877,0.3692,13,1.6424,563
+2020,2700805,652,0,0,0.8872,0.3598,14,1.5608,652
+2021,2700805,657,0,0,0.8403,0.4976,17,1.5787,657
+2022,2700805,837,0,0,0.6026,0.9356,20,1.3804,837
+2023,2700805,,,,,,,,225
+2024,2700805,,,,,,,,200
+2025,2700805,,,,,,,,225
+2026,2700805,,,,,,,,228
+2018,2700904,293,0,0,0.6731,0.5711,6,1.819,293
+2019,2700904,342,0,0,0.6981,0.5436,6,1.889,342
+2020,2700904,364,0,0,0.6775,0.5655,6,1.9239,364
+2021,2700904,373,0,0,0.5988,0.7613,8,1.8858,373
+2022,2700904,795,0,0,0.8072,0.3834,7,1.5699,795
+2023,2700904,,,,,,,,93
+2024,2700904,,,,,,,,103
+2025,2700904,,,,,,,,104
+2026,2700904,,,,,,,,102
+2018,2701001,2091,612,29.2683,0.3606,1.6678,60,1.7377,2091
+2019,2701001,2160,644,29.8148,0.3489,1.7168,61,1.6369,2160
+2020,2701001,2014,635,31.5293,0.3432,1.7076,60,1.6743,2014
+2021,2701001,1994,600,30.0903,0.3337,1.7603,62,1.7318,1994
+2022,2701001,2148,667,31.0521,0.2971,1.9458,71,2.1826,2148
+2023,2701001,,,,,,,,1061
+2024,2701001,,,,,,,,1124
+2025,2701001,,,,,,,,1191
+2026,2701001,,,,,,,,1237
+2018,2701100,582,7,1.2027,0.6801,0.8741,22,1.889,582
+2019,2701100,557,3,0.5386,0.6116,1.0202,24,1.8557,557
+2020,2701100,482,0,0,0.8566,0.4655,18,1.8524,482
+2021,2701100,565,2,0.354,0.8,0.6157,20,1.7328,565
+2022,2701100,1021,10,0.9794,0.7855,0.6467,25,1.4932,1021
+2023,2701100,,,,,,,,113
+2024,2701100,,,,,,,,136
+2025,2701100,,,,,,,,82
+2026,2701100,,,,,,,,87
+2018,2701209,1388,5,0.3602,0.4809,0.9387,18,2.0187,1388
+2019,2701209,904,3,0.3319,0.862,0.4332,18,1.7727,904
+2020,2701209,842,3,0.3563,0.8503,0.4582,18,1.824,842
+2021,2701209,1298,2,0.1541,0.4878,0.9896,21,1.7929,1298
+2022,2701209,1586,1,0.0631,0.4684,1.1138,23,1.7547,1586
+2023,2701209,,,,,,,,274
+2024,2701209,,,,,,,,278
+2025,2701209,,,,,,,,348
+2026,2701209,,,,,,,,335
+2018,2701308,1381,157,11.3686,0.4447,1.6704,51,2.0958,1381
+2019,2701308,1304,137,10.5061,0.4492,1.6466,46,2.0559,1304
+2020,2701308,1690,136,8.0473,0.5814,1.2585,44,1.7649,1690
+2021,2701308,1482,97,6.5452,0.5588,1.3568,50,1.8796,1482
+2022,2701308,605,95,15.7025,0.0701,3.2061,63,1.4896,605
+2023,2701308,,,,,,,,665
+2024,2701308,,,,,,,,703
+2025,2701308,,,,,,,,661
+2026,2701308,,,,,,,,775
+2018,2701357,621,70,11.2721,0.6418,0.8668,17,1.4164,621
+2019,2701357,604,35,5.7947,0.6967,0.7955,18,1.3667,604
+2020,2701357,586,33,5.6314,0.7354,0.7005,17,1.3691,586
+2021,2701357,606,2,0.33,0.7993,0.5554,15,1.3422,606
+2022,2701357,554,36,6.4982,0.5342,1.2463,23,1.4556,554
+2023,2701357,,,,,,,,138
+2024,2701357,,,,,,,,134
+2025,2701357,,,,,,,,145
+2026,2701357,,,,,,,,132
+2018,2701407,4530,2820,62.2517,0.4366,1.3575,64,1.9467,4530
+2019,2701407,4802,2965,61.7451,0.4138,1.4761,73,1.9308,4802
+2020,2701407,4367,2739,62.7204,0.4389,1.4464,70,1.6287,4367
+2021,2701407,5007,3054,60.9946,0.421,1.5304,78,1.9045,5007
+2022,2701407,5616,3428,61.0399,0.404,1.6517,91,1.9332,5616
+2023,2701407,,,,,,,,4954
+2024,2701407,,,,,,,,5084
+2025,2701407,,,,,,,,4666
+2026,2701407,,,,,,,,4413
+2018,2701506,590,0,0,0.7722,0.6969,22,1.4321,590
+2019,2701506,560,0,0,0.808,0.581,19,1.4204,560
+2020,2701506,536,0,0,0.823,0.5488,19,1.6821,536
+2021,2701506,574,0,0,0.7635,0.7078,21,1.6285,574
+2022,2701506,518,0,0,0.7565,0.7167,18,1.6539,518
+2023,2701506,,,,,,,,60
+2024,2701506,,,,,,,,62
+2025,2701506,,,,,,,,77
+2026,2701506,,,,,,,,79
+2018,2701605,598,0,0,0.8223,0.5563,19,1.5514,598
+2019,2701605,594,0,0,0.7854,0.6605,21,1.9403,594
+2020,2701605,568,0,0,0.7615,0.7035,20,1.9621,568
+2021,2701605,443,0,0,0.6681,0.9189,17,1.3112,443
+2022,2701605,634,0,0,0.6786,0.9312,23,1.9902,634
+2023,2701605,,,,,,,,,
+2024,2701605,,,,,,,,,
+2025,2701605,,,,,,,,147
+2026,2701605,,,,,,,,1241
+2018,2701704,1229,160,13.0187,0.3906,1.7976,53,1.455,1229
+2019,2701704,1660,111,6.6867,0.5207,1.4824,54,1.4396,1660
+2020,2701704,1175,101,8.5957,0.4185,1.7848,54,1.5968,1175
+2021,2701704,1524,115,7.5459,0.4358,1.7416,56,1.6656,1524
+2022,2701704,1515,84,5.5446,0.3207,2.1828,66,1.8959,1515
+2023,2701704,,,,,,,,685
+2024,2701704,,,,,,,,746
+2025,2701704,,,,,,,,900
+2026,2701704,,,,,,,,721
+2018,2701803,424,0,0,0.8516,0.435,13,2.1876,424
+2019,2701803,433,0,0,0.863,0.3989,12,2.2042,433
+2020,2701803,454,0,0,0.8852,0.3543,13,2.1046,454
+2021,2701803,475,0,0,0.8903,0.3311,13,2.0513,475
+2022,2701803,455,0,0,0.8173,0.549,17,2.0614,455
+2023,2701803,,,,,,,,49
+2024,2701803,,,,,,,,62
+2025,2701803,,,,,,,,58
+2026,2701803,,,,,,,,60
+2018,2701902,477,6,1.2579,0.7241,0.7799,18,1.7731,477
+2019,2701902,461,6,1.3015,0.7153,0.7999,17,1.7579,461
+2020,2701902,419,4,0.9547,0.7501,0.6832,15,1.7552,419
+2021,2701902,521,0,0,0.736,0.7355,16,1.8693,521
+2022,2701902,395,0,0,0.2347,1.9716,19,1.901,395
+2023,2701902,,,,,,,,238
+2024,2701902,,,,,,,,193
+2025,2701902,,,,,,,,217
+2026,2701902,,,,,,,,239
+2018,2702009,504,0,0,0.6681,0.9932,25,1.8806,504
+2019,2702009,520,0,0,0.5927,1.2317,30,1.9398,520
+2020,2702009,472,0,0,0.5992,1.1663,24,2.0483,472
+2021,2702009,458,0,0,0.6285,1.1056,26,2.0367,458
+2022,2702009,459,0,0,0.5886,1.2427,30,2.0745,459
+2023,2702009,,,,,,,,162
+2024,2702009,,,,,,,,191
+2025,2702009,,,,,,,,199
+2026,2702009,,,,,,,,299
+2018,2702108,1748,366,20.9382,0.4375,1.4855,44,1.5977,1748
+2019,2702108,2393,361,15.0857,0.3312,1.7393,43,1.6658,2393
+2020,2702108,2083,378,18.1469,0.3934,1.5822,42,1.5973,2083
+2021,2702108,2344,426,18.1741,0.3422,1.6118,42,1.4338,2344
+2022,2702108,2863,991,34.614,0.2686,1.8132,48,1.2532,2863
+2023,2702108,,,,,,,,1106
+2024,2702108,,,,,,,,878
+2025,2702108,,,,,,,,840
+2026,2702108,,,,,,,,746
+2018,2702207,601,0,0,0.8431,0.39,9,1.8298,601
+2019,2702207,636,0,0,0.8422,0.4244,12,1.7815,636
+2020,2702207,635,0,0,0.8903,0.337,13,1.6355,635
+2021,2702207,587,0,0,0.9299,0.2283,10,1.7223,587
+2022,2702207,622,0,0,0.8524,0.4495,15,1.8802,622
+2023,2702207,,,,,,,,52
+2024,2702207,,,,,,,,61
+2025,2702207,,,,,,,,67
+2026,2702207,,,,,,,,66
+2018,2702306,11373,7575,66.6051,0.4305,1.7337,141,1.9346,11373
+2019,2702306,11290,6934,61.4172,0.3922,1.774,137,1.8794,11290
+2020,2702306,10508,6852,65.2075,0.4104,1.8072,133,1.8286,10508
+2021,2702306,11938,6275,52.5632,0.3373,1.8239,122,1.8579,11938
+2022,2702306,13721,6641,48.4003,0.2944,2.1239,162,2.0505,13721
+2023,2702306,,,,,,,,10461
+2024,2702306,,,,,,,,10842
+2025,2702306,,,,,,,,10544
+2026,2702306,,,,,,,,10318
+2018,2702355,1984,1,0.0504,0.4797,1.4071,43,1.8079,1984
+2019,2702355,1980,2,0.101,0.498,1.3758,43,1.5701,1980
+2020,2702355,1996,1,0.0501,0.1934,2.0919,43,2.2081,1996
+2021,2702355,2280,1,0.0439,0.2522,2.0116,42,2.2018,2280
+2022,2702355,2099,1,0.0476,0.2384,2.0948,53,2.3725,2099
+2023,2702355,,,,,,,,1492
+2024,2702355,,,,,,,,1385
+2025,2702355,,,,,,,,1113
+2026,2702355,,,,,,,,1166
+2018,2702405,4576,0,0,0.2863,2.6215,138,1.6805,4576
+2019,2702405,5045,0,0,0.3235,2.4803,144,1.74,5045
+2020,2702405,3540,0,0,0.1801,3.0901,142,1.7004,3540
+2021,2702405,4359,0,0,0.2175,2.9192,148,1.8667,4359
+2022,2702405,5441,0,0,0.1781,3.2051,177,2.0214,5441
+2023,2702405,,,,,,,,3293
+2024,2702405,,,,,,,,3622
+2025,2702405,,,,,,,,5078
+2026,2702405,,,,,,,,5009
+2018,2702504,482,0,0,0.8493,0.4536,13,1.9822,482
+2019,2702504,558,0,0,0.6667,0.7668,14,1.9251,558
+2020,2702504,508,0,0,0.7603,0.6647,17,2.0142,508
+2021,2702504,449,0,0,0.8964,0.3161,10,2.0706,449
+2022,2702504,499,0,0,0.7522,0.7137,19,2.0227,499
+2023,2702504,,,,,,,,62
+2024,2702504,,,,,,,,86
+2025,2702504,,,,,,,,83
+2026,2702504,,,,,,,,111
+2018,2702553,702,0,0,0.8171,0.536,16,1.6591,702
+2019,2702553,62,0,0,0.2014,2.1106,15,1.3097,62
+2020,2702553,768,0,0,0.8628,0.4075,14,1.4223,768
+2021,2702553,514,0,0,0.7894,0.5802,12,1.5331,514
+2022,2702553,534,0,0,0.7543,0.6874,16,1.6668,534
+2023,2702553,,,,,,,,554
+2024,2702553,,,,,,,,563
+2025,2702553,,,,,,,,720
+2026,2702553,,,,,,,,767
+2018,2702603,955,40,4.1885,0.5518,1.2866,33,2.0095,955
+2019,2702603,877,0,0,0.6129,1.1413,33,2.0744,877
+2020,2702603,819,0,0,0.6314,1.1169,33,2.031,819
+2021,2702603,1407,0,0,0.7447,0.8081,35,2.0096,1407
+2022,2702603,1656,0,0,0.5062,1.3132,42,1.8998,1656
+2023,2702603,,,,,,,,254
+2024,2702603,,,,,,,,308
+2025,2702603,,,,,,,,303
+2026,2702603,,,,,,,,302
+2018,2702702,624,3,0.4808,0.5861,1.0063,23,1.5546,624
+2019,2702702,433,4,0.9238,0.4504,1.2389,18,1.5622,433
+2020,2702702,384,3,0.7812,0.4249,1.2574,17,1.4757,384
+2021,2702702,468,3,0.641,0.4278,1.2814,16,1.5328,468
+2022,2702702,517,7,1.354,0.4961,1.1787,20,1.6677,517
+2023,2702702,,,,,,,,231
+2024,2702702,,,,,,,,234
+2025,2702702,,,,,,,,206
+2026,2702702,,,,,,,,232
+2018,2702801,1180,127,10.7627,0.5546,1.2013,30,1.0475,1180
+2019,2702801,1147,117,10.2005,0.6059,1.041,26,1.0367,1147
+2020,2702801,1169,110,9.4098,0.6245,0.994,27,1.0298,1169
+2021,2702801,956,113,11.8201,0.5398,1.1909,29,1.5377,956
+2022,2702801,993,120,12.0846,0.4769,1.4081,40,1.2391,993
+2023,2702801,,,,,,,,282
+2024,2702801,,,,,,,,323
+2025,2702801,,,,,,,,372
+2026,2702801,,,,,,,,361
+2018,2702900,975,0,0,0.3748,2.057,61,1.4944,975
+2019,2702900,1001,0,0,0.3572,2.1363,62,1.454,1001
+2020,2702900,1104,0,0,0.3731,2.0598,60,1.4971,1104
+2021,2702900,1117,0,0,0.3792,2.0481,61,1.6213,1117
+2022,2702900,3512,1,0.0285,0.7465,0.8913,66,1.5874,3512
+2023,2702900,,,,,,,,478
+2024,2702900,,,,,,,,485
+2025,2702900,,,,,,,,462
+2026,2702900,,,,,,,,624
+2018,2703007,709,8,1.1283,0.5586,1.3621,36,1.8949,709
+2019,2703007,709,42,5.9238,0.5501,1.348,36,1.7731,709
+2020,2703007,721,35,4.8544,0.5479,1.3581,37,1.8547,721
+2021,2703007,789,44,5.5767,0.5475,1.395,42,1.7498,789
+2022,2703007,984,62,6.3008,0.5269,1.4511,46,1.7917,984
+2023,2703007,,,,,,,,276
+2024,2703007,,,,,,,,280
+2025,2703007,,,,,,,,291
+2026,2703007,,,,,,,,236
+2018,2703106,1195,0,0,0.7356,0.8435,30,1.8392,1195
+2019,2703106,1190,0,0,0.7388,0.8443,32,1.8646,1190
+2020,2703106,1196,0,0,0.7773,0.7423,33,1.9145,1196
+2021,2703106,1575,0,0,0.7577,0.7903,33,2.0366,1575
+2022,2703106,1626,0,0,0.7308,0.8861,37,1.7671,1626
+2023,2703106,,,,,,,,262
+2024,2703106,,,,,,,,271
+2025,2703106,,,,,,,,246
+2026,2703106,,,,,,,,260
+2018,2703205,3624,2644,72.9581,0.5757,0.8792,40,1.7786,3624
+2019,2703205,3592,2526,70.3229,0.5485,0.9273,35,1.6636,3592
+2020,2703205,3289,2200,66.8896,0.5123,1.0123,35,1.76,3289
+2021,2703205,3484,2399,68.8576,0.5275,1.0039,35,1.6455,3484
+2022,2703205,3612,2503,69.2968,0.5297,1.0386,40,1.6984,3612
+2023,2703205,,,,,,,,3203
+2024,2703205,,,,,,,,3224
+2025,2703205,,,,,,,,2927
+2026,2703205,,,,,,,,2856
+2018,2703304,703,0,0,0.7427,0.7616,22,1.8742,703
+2019,2703304,691,0,0,0.7556,0.7294,21,1.9193,691
+2020,2703304,665,0,0,0.7114,0.8528,21,1.9469,665
+2021,2703304,662,0,0,0.7126,0.852,21,1.9947,662
+2022,2703304,679,0,0,0.668,1.0016,25,2.4011,679
+2023,2703304,,,,,,,,132
+2024,2703304,,,,,,,,173
+2025,2703304,,,,,,,,135
+2026,2703304,,,,,,,,131
+2018,2703403,233,0,0,0.7118,0.7452,10,1.7155,233
+2019,2703403,228,0,0,0.7421,0.6772,9,1.7341,228
+2020,2703403,228,0,0,0.7426,0.6635,9,1.8327,228
+2021,2703403,224,0,0,0.723,0.7408,12,1.7235,224
+2022,2703403,226,0,0,0.7032,0.8054,14,1.8431,226
+2023,2703403,,,,,,,,65
+2024,2703403,,,,,,,,78
+2025,2703403,,,,,,,,47
+2026,2703403,,,,,,,,45
+2018,2703502,468,110,23.5043,0.4413,1.2862,19,1.4147,468
+2019,2703502,415,145,34.9398,0.3575,1.4314,19,1.2983,415
+2020,2703502,570,106,18.5965,0.4817,1.2107,18,1.6041,570
+2021,2703502,553,94,16.9982,0.5036,1.1183,17,1.6169,553
+2022,2703502,585,77,13.1624,0.5677,0.9867,17,1.6863,585
+2023,2703502,,,,,,,,168
+2024,2703502,,,,,,,,164
+2025,2703502,,,,,,,,166
+2026,2703502,,,,,,,,148
+2018,2703601,806,10,1.2407,0.2478,1.9409,33,1.653,806
+2019,2703601,1057,11,1.0407,0.3526,1.572,32,1.5867,1057
+2020,2703601,1065,10,0.939,0.3426,1.5733,33,1.4768,1065
+2021,2703601,1357,8,0.5895,0.3754,1.4238,36,1.5249,1357
+2022,2703601,1846,2,0.1083,0.3658,1.4574,46,1.5469,1846
+2023,2703601,,,,,,,,1526
+2024,2703601,,,,,,,,1666
+2025,2703601,,,,,,,,1822
+2026,2703601,,,,,,,,2002
+2018,2703700,540,0,0,0.9028,0.306,10,1.6598,540
+2019,2703700,538,0,0,0.8954,0.3287,11,1.6503,538
+2020,2703700,31,0,0,0.1426,2.1121,10,1.2506,31
+2021,2703700,467,0,0,0.8682,0.4049,12,1.6804,467
+2022,2703700,54,0,0,0.0933,2.5053,15,1.1704,54
+2023,2703700,,,,,,,,43
+2024,2703700,,,,,,,,36
+2025,2703700,,,,,,,,46
+2026,2703700,,,,,,,,35
+2018,2703759,1329,314,23.6268,0.478,1.2459,31,1.5461,1329
+2019,2703759,203,78,38.4236,0.1786,2.393,27,1.4808,203
+2020,2703759,725,208,28.6897,0.475,1.1197,27,1.6386,725
+2021,2703759,1234,197,15.9643,0.6262,0.8356,24,1.6462,1234
+2022,2703759,1253,172,13.7271,0.5231,1.2117,35,1.6602,1253
+2023,2703759,,,,,,,,376
+2024,2703759,,,,,,,,419
+2025,2703759,,,,,,,,488
+2026,2703759,,,,,,,,465
+2018,2703809,1582,28,1.7699,0.6368,1.1731,51,1.7912,1582
+2019,2703809,1620,16,0.9877,0.6758,1.0528,47,1.8157,1620
+2020,2703809,1008,24,2.381,0.5021,1.5766,47,2.1432,1008
+2021,2703809,1153,22,1.9081,0.4381,1.7557,50,1.9119,1153
+2022,2703809,1262,20,1.5848,0.3918,1.8608,51,2.0229,1262
+2023,2703809,,,,,,,,543
+2024,2703809,,,,,,,,541
+2025,2703809,,,,,,,,440
+2026,2703809,,,,,,,,481
+2018,2703908,482,26,5.3942,0.7704,0.6052,14,1.4579,482
+2019,2703908,464,19,4.0948,0.7911,0.5645,13,1.4812,464
+2020,2703908,293,16,5.4608,0.6399,0.9065,12,1.6155,293
+2021,2703908,370,17,4.5946,0.7026,0.7683,13,1.505,370
+2022,2703908,498,15,3.012,0.6883,0.8613,18,1.4319,498
+2023,2703908,,,,,,,,87
+2024,2703908,,,,,,,,83
+2025,2703908,,,,,,,,90
+2026,2703908,,,,,,,,81
+2018,2704005,2497,129,5.1662,0.3304,2.09,72,1.5961,2497
+2019,2704005,2606,93,3.5687,0.3369,2.0655,75,1.5646,2606
+2020,2704005,1780,78,4.382,0.186,2.6508,73,1.5623,1780
+2021,2704005,2454,114,4.6455,0.1706,2.5554,82,1.5751,2454
+2022,2704005,2564,165,6.4353,0.1539,2.5992,83,1.5897,2564
+2023,2704005,,,,,,,,1882
+2024,2704005,,,,,,,,1827
+2025,2704005,,,,,,,,1910
+2026,2704005,,,,,,,,1987
+2018,2704104,927,0,0,0.4154,1.5413,34,1.8089,927
+2019,2704104,910,0,0,0.3898,1.6259,39,1.7637,910
+2020,2704104,1114,0,0,0.364,1.5747,42,1.6528,1114
+2021,2704104,1129,0,0,0.3519,1.5874,39,1.62,1129
+2022,2704104,1173,0,0,0.2304,2.0558,50,1.6358,1173
+2023,2704104,,,,,,,,781
+2024,2704104,,,,,,,,728
+2025,2704104,,,,,,,,775
+2026,2704104,,,,,,,,727
+2018,2704203,1858,9,0.4844,0.3831,1.6891,42,1.5302,1858
+2019,2704203,1878,4,0.213,0.3496,1.8331,51,1.5106,1878
+2020,2704203,1994,0,0,0.307,1.9425,50,1.5254,1994
+2021,2704203,2213,0,0,0.2748,1.97,54,1.5065,2213
+2022,2704203,2179,5,0.2295,0.2712,1.9977,60,1.5788,2179
+2023,2704203,,,,,,,,1362
+2024,2704203,,,,,,,,1408
+2025,2704203,,,,,,,,1446
+2026,2704203,,,,,,,,1518
+2018,2704302,248353,721,0.2903,0.0595,4.4336,750,2.7857,248353
+2019,2704302,251076,769,0.3063,0.0656,4.3899,743,2.6595,251076
+2020,2704302,246524,739,0.2998,0.0658,4.3941,742,2.5788,246524
+2021,2704302,260052,647,0.2488,0.0622,4.4492,746,2.5594,260052
+2022,2704302,283770,2169,0.7644,0.0438,4.6143,771,2.7384,283770
+2023,2704302,,,,,,,,223739
+2024,2704302,,,,,,,,235456
+2025,2704302,,,,,,,,244442
+2026,2704302,,,,,,,,249419
+2018,2704401,959,0,0,0.5131,1.4722,41,1.7122,959
+2019,2704401,992,0,0,0.5262,1.4418,40,1.8917,992
+2020,2704401,1034,0,0,0.5437,1.3809,40,1.9987,1034
+2021,2704401,1653,0,0,0.6671,1.0617,46,1.9498,1653
+2022,2704401,1110,0,0,0.4689,1.6632,54,2.0523,1110
+2023,2704401,,,,,,,,358
+2024,2704401,,,,,,,,415
+2025,2704401,,,,,,,,416
+2026,2704401,,,,,,,,421
+2018,2704500,4988,80,1.6038,0.1995,2.4878,105,1.7936,4988
+2019,2704500,4503,80,1.7766,0.1977,2.4979,109,1.8357,4503
+2020,2704500,4610,78,1.692,0.2026,2.484,108,1.7807,4610
+2021,2704500,5447,61,1.1199,0.1891,2.5449,110,1.6929,5447
+2022,2704500,6919,58,0.8383,0.1795,2.6436,140,1.6252,6919
+2023,2704500,,,,,,,,5753
+2024,2704500,,,,,,,,5987
+2025,2704500,,,,,,,,6551
+2026,2704500,,,,,,,,6764
+2018,2704609,325,0,0,0.6828,0.911,17,2.2282,325
+2019,2704609,313,0,0,0.6568,0.983,19,2.2396,313
+2020,2704609,312,0,0,0.6875,0.8624,15,2.1634,312
+2021,2704609,282,0,0,0.7118,0.7451,12,2.1044,282
+2022,2704609,293,0,0,0.648,0.9774,17,2.189,293
+2023,2704609,,,,,,,,75
+2024,2704609,,,,,,,,90
+2025,2704609,,,,,,,,104
+2026,2704609,,,,,,,,160
+2018,2704708,10205,1836,17.9912,0.1203,3.1876,181,2.4337,10205
+2019,2704708,10536,1817,17.2456,0.1202,3.1585,182,2.2797,10536
+2020,2704708,9729,1708,17.5558,0.0774,3.4584,182,2.3691,9729
+2021,2704708,12388,1683,13.5857,0.1018,3.3124,194,2.2629,12388
+2022,2704708,14781,1859,12.577,0.092,3.4857,224,2.3681,14781
+2023,2704708,,,,,,,,11879
+2024,2704708,,,,,,,,12333
+2025,2704708,,,,,,,,13130
+2026,2704708,,,,,,,,13669
+2018,2704807,896,0,0,0.3795,1.8403,43,1.6808,896
+2019,2704807,1026,0,0,0.2806,2.206,50,1.6489,1026
+2020,2704807,887,0,0,0.3726,1.9301,52,1.6732,887
+2021,2704807,1073,0,0,0.3579,1.9849,49,1.6272,1073
+2022,2704807,1425,0,0,0.427,1.8359,62,1.7085,1425
+2023,2704807,,,,,,,,509
+2024,2704807,,,,,,,,509
+2025,2704807,,,,,,,,546
+2026,2704807,,,,,,,,585
+2018,2704906,341,0,0,0.7356,0.6285,9,1.318,341
+2019,2704906,315,0,0,0.866,0.3881,10,1.3614,315
+2020,2704906,327,0,0,0.7784,0.5915,10,1.2977,327
+2021,2704906,411,0,0,0.8292,0.4926,12,1.4682,411
+2022,2704906,380,0,0,0.7219,0.7467,13,1.5906,380
+2023,2704906,,,,,,,,54
+2024,2704906,,,,,,,,78
+2025,2704906,,,,,,,,119
+2026,2704906,,,,,,,,118
+2018,2705002,770,0,0,0.6837,0.9111,23,1.7095,770
+2019,2705002,811,0,0,0.6094,1.1635,32,1.6492,811
+2020,2705002,808,0,0,0.5605,1.3042,34,1.9867,808
+2021,2705002,765,0,0,0.5497,1.305,29,1.7929,765
+2022,2705002,992,0,0,0.5559,1.331,38,1.7293,992
+2023,2705002,,,,,,,,231
+2024,2705002,,,,,,,,241
+2025,2705002,,,,,,,,257
+2026,2705002,,,,,,,,273
+2018,2705101,4183,2416,57.7576,0.3754,1.5891,71,1.5236,4183
+2019,2705101,3646,2052,56.2809,0.3674,1.6185,74,1.5579,3646
+2020,2705101,3592,2153,59.9388,0.4058,1.5193,74,1.4453,3592
+2021,2705101,4546,2325,51.1439,0.3646,1.5711,73,1.4807,4546
+2022,2705101,5133,2415,47.0485,0.3353,1.7305,91,1.8472,5133
+2023,2705101,,,,,,,,3273
+2024,2705101,,,,,,,,3218
+2025,2705101,,,,,,,,3074
+2026,2705101,,,,,,,,2853
+2018,2705200,1267,25,1.9732,0.4478,1.7502,55,1.8294,1267
+2019,2705200,1339,24,1.7924,0.3895,1.9138,56,1.7868,1339
+2020,2705200,1289,52,4.0341,0.3995,1.8572,54,1.687,1289
+2021,2705200,1899,28,1.4745,0.4902,1.6297,62,1.4667,1899
+2022,2705200,2226,38,1.7071,0.4494,1.7998,68,1.4194,2226
+2023,2705200,,,,,,,,937
+2024,2705200,,,,,,,,997
+2025,2705200,,,,,,,,998
+2026,2705200,,,,,,,,1063
+2018,2705309,383,0,0,0.8989,0.3022,10,1.4793,383
+2019,2705309,377,0,0,0.9173,0.2487,8,1.4775,377
+2020,2705309,350,0,0,0.9221,0.223,6,1.4749,350
+2021,2705309,548,0,0,0.9462,0.1689,7,1.6501,548
+2022,2705309,568,0,0,0.9721,0.096,6,1.672,568
+2023,2705309,,,,,,,,18
+2024,2705309,,,,,,,,18
+2025,2705309,,,,,,,,27
+2026,2705309,,,,,,,,28
+2018,2705408,491,0,0,0.7945,0.5651,12,1.9573,491
+2019,2705408,491,0,0,0.7731,0.6291,13,1.6835,491
+2020,2705408,449,0,0,0.7024,0.779,12,1.72,449
+2021,2705408,470,0,0,0.6697,0.8784,16,1.6791,470
+2022,2705408,933,0,0,0.6462,0.9306,19,1.56,933
+2023,2705408,,,,,,,,535
+2024,2705408,,,,,,,,381
+2025,2705408,,,,,,,,687
+2026,2705408,,,,,,,,753
+2018,2705507,2808,230,8.1909,0.3597,2.0466,90,1.7394,2808
+2019,2705507,2907,168,5.7792,0.3648,2.0549,93,1.7503,2907
+2020,2705507,2871,186,6.4786,0.3682,2.0254,89,1.7197,2871
+2021,2705507,2958,171,5.7809,0.3669,2.0505,92,1.6932,2958
+2022,2705507,3994,224,5.6084,0.2409,2.2891,106,1.7968,3994
+2023,2705507,,,,,,,,2672
+2024,2705507,,,,,,,,3110
+2025,2705507,,,,,,,,3160
+2026,2705507,,,,,,,,3136
+2018,2705606,990,40,4.0404,0.5329,1.2646,30,1.4957,990
+2019,2705606,964,36,3.7344,0.5964,1.093,26,1.5238,964
+2020,2705606,976,60,6.1475,0.558,1.1943,31,1.5277,976
+2021,2705606,1132,52,4.5936,0.5421,1.2695,34,1.5788,1132
+2022,2705606,1044,7,0.6705,0.3922,1.6391,41,1.5883,1044
+2023,2705606,,,,,,,,468
+2024,2705606,,,,,,,,440
+2025,2705606,,,,,,,,404
+2026,2705606,,,,,,,,437
+2018,2705705,2016,0,0,0.3038,2.3307,69,1.6934,2016
+2019,2705705,2123,0,0,0.3143,2.3144,72,1.6435,2123
+2020,2705705,2108,0,0,0.3183,2.2917,78,1.606,2108
+2021,2705705,1824,0,0,0.2787,2.423,78,1.677,1824
+2022,2705705,2272,0,0,0.2945,2.4236,87,1.934,2272
+2023,2705705,,,,,,,,904
+2024,2705705,,,,,,,,1068
+2025,2705705,,,,,,,,1207
+2026,2705705,,,,,,,,1329
+2018,2705804,645,0,0,0.8466,0.4316,12,1.9539,645
+2019,2705804,655,0,0,0.8292,0.5037,17,1.9997,655
+2020,2705804,656,0,0,0.8268,0.5018,15,2.0189,656
+2021,2705804,556,0,0,0.8076,0.5376,15,2.1257,556
+2022,2705804,668,0,0,0.6783,0.877,22,2.0918,668
+2023,2705804,,,,,,,,86
+2024,2705804,,,,,,,,94
+2025,2705804,,,,,,,,88
+2026,2705804,,,,,,,,137
+2018,2705903,277,0,0,0.9087,0.2778,8,1.6723,277
+2019,2705903,279,0,0,0.8892,0.3212,8,1.7238,279
+2020,2705903,271,0,0,0.8998,0.2969,8,1.7113,271
+2021,2705903,270,0,0,0.8248,0.489,9,1.662,270
+2022,2705903,284,0,0,0.865,0.387,9,1.6418,284
+2023,2705903,,,,,,,,8
+2024,2705903,,,,,,,,7
+2025,2705903,,,,,,,,8
+2026,2705903,,,,,,,,9
+2018,2706000,684,0,0,0.8368,0.4659,16,1.7292,684
+2019,2706000,691,0,0,0.8432,0.457,15,1.7693,691
+2020,2706000,730,0,0,0.8689,0.3779,14,1.7883,730
+2021,2706000,793,0,0,0.8626,0.3983,14,1.6786,793
+2022,2706000,861,0,0,0.8666,0.3973,17,1.6773,861
+2023,2706000,,,,,,,,79
+2024,2706000,,,,,,,,83
+2025,2706000,,,,,,,,97
+2026,2706000,,,,,,,,91
+2018,2706109,487,0,0,0.6369,0.9642,20,1.8511,487
+2019,2706109,508,0,0,0.6052,1.0176,19,1.8952,508
+2020,2706109,492,0,0,0.6171,0.9301,18,1.7749,492
+2021,2706109,959,0,0,0.7644,0.6368,20,1.458,959
+2022,2706109,993,0,0,0.7323,0.7867,27,1.4693,993
+2023,2706109,,,,,,,,186
+2024,2706109,,,,,,,,198
+2025,2706109,,,,,,,,225
+2026,2706109,,,,,,,,425
+2018,2706208,267,0,0,0.9777,0.074,4,2.0627,267
+2019,2706208,260,0,0,0.9696,0.0955,4,2.1242,260
+2020,2706208,221,0,0,0.9731,0.0868,4,2.3066,221
+2021,2706208,308,0,0,0.9743,0.0828,4,2.01,308
+2022,2706208,349,0,0,0.966,0.1098,5,2.0535,349
+2023,2706208,,,,,,,,7
+2024,2706208,,,,,,,,6
+2025,2706208,,,,,,,,9
+2026,2706208,,,,,,,,8
+2018,2706307,7920,54,0.6818,0.1954,3.1112,207,1.9521,7920
+2019,2706307,7822,2,0.0256,0.1851,3.1091,200,1.743,7822
+2020,2706307,6315,2,0.0317,0.0945,3.6152,197,1.7514,6315
+2021,2706307,7218,0,0,0.1109,3.5299,199,1.7269,7218
+2022,2706307,8428,0,0,0.1337,3.4699,228,1.7213,8428
+2023,2706307,,,,,,,,5844
+2024,2706307,,,,,,,,5557
+2025,2706307,,,,,,,,7011
+2026,2706307,,,,,,,,7135
+2018,2706406,2396,0,0,0.7398,0.7932,38,1.6484,2396
+2019,2706406,1605,0,0,0.6426,1.0397,40,1.774,1605
+2020,2706406,1162,0,0,0.5249,1.3262,38,1.8789,1162
+2021,2706406,1313,0,0,0.5805,1.1555,36,1.7976,1313
+2022,2706406,1176,0,0,0.4958,1.4454,45,1.8034,1176
+2023,2706406,,,,,,,,351
+2024,2706406,,,,,,,,374
+2025,2706406,,,,,,,,405
+2026,2706406,,,,,,,,415
+2018,2706422,676,0,0,0.8642,0.3903,12,1.908,676
+2019,2706422,673,0,0,0.8606,0.4156,13,1.9136,673
+2020,2706422,939,0,0,0.8969,0.3148,13,1.8614,939
+2021,2706422,432,0,0,0.809,0.5118,10,2.008,432
+2022,2706422,517,0,0,0.7768,0.6274,15,2.2222,517
+2023,2706422,,,,,,,,63
+2024,2706422,,,,,,,,84
+2025,2706422,,,,,,,,85
+2026,2706422,,,,,,,,83
+2018,2706448,1085,2,0.1843,0.0997,2.9256,67,1.5728,1085
+2019,2706448,1084,18,1.6605,0.1021,2.9945,72,1.6354,1084
+2020,2706448,1075,11,1.0233,0.1075,2.9168,63,1.5328,1075
+2021,2706448,1373,11,0.8012,0.1012,2.9509,70,1.4566,1373
+2022,2706448,1539,22,1.4295,0.0888,3.1006,87,1.4157,1539
+2023,2706448,,,,,,,,1161
+2024,2706448,,,,,,,,1202
+2025,2706448,,,,,,,,1234
+2026,2706448,,,,,,,,1384
+2018,2706505,1083,12,1.108,0.5188,1.4664,42,1.7852,1083
+2019,2706505,1092,7,0.641,0.5426,1.3678,40,1.8143,1092
+2020,2706505,1213,5,0.4122,0.5303,1.4442,43,1.7461,1213
+2021,2706505,1439,12,0.8339,0.5026,1.465,41,1.7232,1439
+2022,2706505,2282,12,0.5259,0.4709,1.5502,52,1.6062,2282
+2023,2706505,,,,,,,,912
+2024,2706505,,,,,,,,951
+2025,2706505,,,,,,,,1014
+2026,2706505,,,,,,,,1083
+2018,2706604,571,3,0.5254,0.7798,0.7266,29,1.4966,571
+2019,2706604,525,3,0.5714,0.7521,0.7974,26,1.4002,525
+2020,2706604,390,0,0,0.7006,0.9082,22,1.2957,390
+2021,2706604,63,0,0,0.0854,2.6705,19,1.311,63
+2022,2706604,821,0,0,0.8219,0.576,24,1.6061,821
+2023,2706604,,,,,,,,88
+2024,2706604,,,,,,,,105
+2025,2706604,,,,,,,,100
+2026,2706604,,,,,,,,116
+2018,2706703,6763,619,9.1527,0.1642,3.2239,195,2.1016,6763
+2019,2706703,6236,543,8.7075,0.1669,3.1914,179,1.8806,6236
+2020,2706703,6626,656,9.9004,0.1629,3.1963,190,2.0194,6626
+2021,2706703,7213,841,11.6595,0.1724,3.1096,186,2.0929,7213
+2022,2706703,7780,846,10.874,0.1401,3.2625,199,2.2372,7780
+2023,2706703,,,,,,,,5425
+2024,2706703,,,,,,,,5982
+2025,2706703,,,,,,,,6537
+2026,2706703,,,,,,,,6971
+2018,2706802,1029,0,0,0.65,1.1047,42,1.7324,1029
+2019,2706802,730,0,0,0.5756,1.3035,34,1.8693,730
+2020,2706802,798,0,0,0.453,1.5791,38,1.7213,798
+2021,2706802,1059,0,0,0.5838,1.2231,36,1.5951,1059
+2022,2706802,834,0,0,0.4275,1.7495,45,1.8681,834
+2023,2706802,,,,,,,,356
+2024,2706802,,,,,,,,352
+2025,2706802,,,,,,,,282
+2026,2706802,,,,,,,,257
+2018,2706901,4347,174,4.0028,0.2185,2.6536,120,2.7804,4347
+2019,2706901,3660,204,5.5738,0.2647,2.5377,110,2.8371,3660
+2020,2706901,3642,129,3.542,0.2383,2.7044,120,2.603,3642
+2021,2706901,3853,87,2.258,0.2539,2.7091,131,2.3448,3853
+2022,2706901,5136,131,2.5506,0.1658,3.0609,160,2.4141,5136
+2023,2706901,,,,,,,,3435
+2024,2706901,,,,,,,,3795
+2025,2706901,,,,,,,,3992
+2026,2706901,,,,,,,,4001
+2018,2707008,379,4,1.0554,0.7991,0.5138,10,1.4654,379
+2019,2707008,370,4,1.0811,0.8321,0.4381,9,1.4739,370
+2020,2707008,390,0,0,0.8543,0.3746,8,1.4889,390
+2021,2707008,419,0,0,0.8946,0.2779,7,1.5252,419
+2022,2707008,448,7,1.5625,0.7884,0.5731,14,1.5024,448
+2023,2707008,,,,,,,,48
+2024,2707008,,,,,,,,50
+2025,2707008,,,,,,,,56
+2026,2707008,,,,,,,,64
+2018,2707107,2706,0,0,0.6284,1.1676,48,2.1099,2706
+2019,2707107,2530,0,0,0.572,1.3277,55,2.1728,2530
+2020,2707107,2753,0,0,0.5988,1.2273,55,2.0701,2753
+2021,2707107,1847,0,0,0.2957,2.1574,64,2.2778,1847
+2022,2707107,1981,0,0,0.2614,2.3567,73,2.1166,1981
+2023,2707107,,,,,,,,1016
+2024,2707107,,,,,,,,1117
+2025,2707107,,,,,,,,1303
+2026,2707107,,,,,,,,1351
+2018,2707206,727,0,0,0.9037,0.3145,14,2.0013,727
+2019,2707206,727,0,0,0.8555,0.4318,15,1.9828,727
+2020,2707206,702,0,0,0.8949,0.3542,17,1.9828,702
+2021,2707206,683,0,0,0.9199,0.266,13,1.9442,683
+2022,2707206,677,0,0,0.8774,0.4007,17,2.2298,677
+2023,2707206,,,,,,,,70
+2024,2707206,,,,,,,,55
+2025,2707206,,,,,,,,69
+2026,2707206,,,,,,,,106
+2018,2707305,3585,1397,38.9679,0.2844,2.016,94,1.7465,3585
+2019,2707305,3774,1671,44.2766,0.2963,1.9112,86,1.527,3774
+2020,2707305,3159,1528,48.3697,0.2947,2.0011,84,1.6435,3159
+2021,2707305,3521,1593,45.2428,0.2767,2.0734,93,1.6185,3521
+2022,2707305,1602,220,13.7328,0.0801,3.3875,104,1.6961,1602
+2023,2707305,,,,,,,,1315
+2024,2707305,,,,,,,,1338
+2025,2707305,,,,,,,,1483
+2026,2707305,,,,,,,,1436
+2018,2707404,928,86,9.2672,0.3551,1.5896,33,1.3832,928
+2019,2707404,941,88,9.3518,0.3392,1.6408,34,1.447,941
+2020,2707404,979,78,7.9673,0.3375,1.5979,35,1.5756,979
+2021,2707404,1279,72,5.6294,0.2459,1.8686,42,1.6085,1279
+2022,2707404,1653,89,5.3842,0.1721,2.3269,57,1.5693,1653
+2023,2707404,,,,,,,,1354
+2024,2707404,,,,,,,,1649
+2025,2707404,,,,,,,,2001
+2026,2707404,,,,,,,,2172
+2018,2707503,723,0,0,0.623,1.1336,32,2.1577,723
+2019,2707503,762,0,0,0.624,1.1191,33,2.1658,762
+2020,2707503,719,0,0,0.6256,1.1173,31,2.2045,719
+2021,2707503,734,0,0,0.6113,1.1628,32,2.1785,734
+2022,2707503,802,0,0,0.607,1.1964,34,2.3009,802
+2023,2707503,,,,,,,,330
+2024,2707503,,,,,,,,347
+2025,2707503,,,,,,,,302
+2026,2707503,,,,,,,,302
+2018,2707602,671,0,0,0.6773,0.9582,26,1.9146,671
+2019,2707602,630,0,0,0.679,0.9465,25,2.0154,630
+2020,2707602,586,0,0,0.7014,0.8969,25,1.9917,586
+2021,2707602,717,0,0,0.7443,0.8007,29,1.9731,717
+2022,2707602,959,0,0,0.742,0.8012,32,1.9588,959
+2023,2707602,,,,,,,,159
+2024,2707602,,,,,,,,164
+2025,2707602,,,,,,,,176
+2026,2707602,,,,,,,,194
+2018,2707701,14784,7438,50.3111,0.286,2.3342,195,1.7317,14784
+2019,2707701,10412,2845,27.3242,0.1494,3.0021,192,1.8453,10412
+2020,2707701,17547,10425,59.4119,0.3598,2.1763,193,1.4128,17547
+2021,2707701,16649,7328,44.0147,0.2335,2.5587,202,1.6872,16649
+2022,2707701,18602,7443,40.0118,0.2077,2.7114,217,1.8631,18602
+2023,2707701,,,,,,,,14312
+2024,2707701,,,,,,,,14515
+2025,2707701,,,,,,,,14553
+2026,2707701,,,,,,,,13969
+2018,2707800,714,51,7.1429,0.5751,1.0227,15,1.6836,714
+2019,2707800,843,24,2.847,0.6281,0.853,13,1.7125,843
+2020,2707800,807,35,4.3371,0.5968,0.9961,14,1.5634,807
+2021,2707800,859,78,9.0803,0.5354,1.1218,19,1.548,859
+2022,2707800,872,100,11.4679,0.404,1.3447,22,1.4921,872
+2023,2707800,,,,,,,,442
+2024,2707800,,,,,,,,467
+2025,2707800,,,,,,,,495
+2026,2707800,,,,,,,,523
+2018,2707909,805,1,0.1242,0.2115,2.0968,29,1.9083,805
+2019,2707909,939,1,0.1065,0.3307,1.642,25,1.7788,939
+2020,2707909,1058,16,1.5123,0.3374,1.6222,26,1.8091,1058
+2021,2707909,1097,0,0,0.3296,1.6024,25,1.7447,1097
+2022,2707909,1002,0,0,0.294,1.7711,32,1.8967,1002
+2023,2707909,,,,,,,,514
+2024,2707909,,,,,,,,508
+2025,2707909,,,,,,,,563
+2026,2707909,,,,,,,,554
+2018,2708006,4339,0,0,0.1304,3.126,128,1.9491,4339
+2019,2708006,4238,0,0,0.1189,3.221,130,1.8669,4238
+2020,2708006,4337,0,0,0.1131,3.2923,151,1.7686,4337
+2021,2708006,4547,0,0,0.1051,3.3335,147,1.7713,4547
+2022,2708006,5777,0,0,0.1469,3.115,149,2.3538,5777
+2023,2708006,,,,,,,,3856
+2024,2708006,,,,,,,,4079
+2025,2708006,,,,,,,,4173
+2026,2708006,,,,,,,,4348
+2018,2708105,837,0,0,0.7895,0.6331,22,1.8171,837
+2019,2708105,838,0,0,0.7711,0.6285,20,1.847,838
+2020,2708105,846,0,0,0.8066,0.5651,19,1.8493,846
+2021,2708105,681,0,0,0.7372,0.7341,22,1.7396,681
+2022,2708105,963,0,0,0.7428,0.7305,24,1.6841,963
+2023,2708105,,,,,,,,135
+2024,2708105,,,,,,,,132
+2025,2708105,,,,,,,,129
+2026,2708105,,,,,,,,128
+2018,2708204,413,0,0,0.7732,0.5662,11,1.763,413
+2019,2708204,399,0,0,0.8205,0.4856,10,1.8595,399
+2020,2708204,381,0,0,0.8311,0.4596,9,1.9667,381
+2021,2708204,411,0,0,0.8428,0.4381,10,2.0103,411
+2022,2708204,451,0,0,0.8319,0.4798,13,2.0314,451
+2023,2708204,,,,,,,,33
+2024,2708204,,,,,,,,40
+2025,2708204,,,,,,,,40
+2026,2708204,,,,,,,,52
+2018,2708303,6178,5000,80.9323,0.671,0.7649,50,1.4978,6178
+2019,2708303,6241,5029,80.58,0.6694,0.76,55,1.5588,6241
+2020,2708303,6190,4982,80.4847,0.6643,0.783,52,1.4935,6190
+2021,2708303,6608,5282,79.9334,0.6556,0.8135,53,1.4572,6608
+2022,2708303,6241,4836,77.4876,0.6177,0.9703,64,1.4213,6241
+2023,2708303,,,,,,,,5205
+2024,2708303,,,,,,,,5242
+2025,2708303,,,,,,,,5264
+2026,2708303,,,,,,,,5178
+2018,2708402,2076,3,0.1445,0.4817,1.4178,43,2.2861,2076
+2019,2708402,1899,0,0,0.5343,1.4503,46,2.2941,1899
+2020,2708402,1986,0,0,0.478,1.6021,55,2.2437,1986
+2021,2708402,2805,0,0,0.6404,1.1796,58,1.8749,2805
+2022,2708402,3309,0,0,0.6596,1.1285,64,1.9589,3309
+2023,2708402,,,,,,,,760
+2024,2708402,,,,,,,,891
+2025,2708402,,,,,,,,1375
+2026,2708402,,,,,,,,1179
+2018,2708501,8136,5652,69.469,0.5232,1.1798,75,1.5889,8136
+2019,2708501,7442,5142,69.0943,0.5202,1.1707,76,1.6241,7442
+2020,2708501,7834,5211,66.5177,0.504,1.1387,69,1.483,7834
+2021,2708501,8914,5423,60.8369,0.4633,1.1957,79,1.5141,8914
+2022,2708501,7994,5554,69.4771,0.517,1.2748,90,1.7382,7994
+2023,2708501,,,,,,,,6938
+2024,2708501,,,,,,,,6921
+2025,2708501,,,,,,,,6425
+2026,2708501,,,,,,,,5923
+2018,2708600,10662,4924,46.1827,0.1797,2.7472,161,2.0036,10662
+2019,2708600,11550,5803,50.2424,0.1767,2.6867,152,1.9012,11550
+2020,2708600,11316,4888,43.1955,0.1564,2.7977,162,1.8395,11316
+2021,2708600,12403,4717,38.0311,0.1796,2.6685,176,1.8025,12403
+2022,2708600,12651,4853,38.3606,0.1771,2.8047,194,1.8393,12651
+2023,2708600,,,,,,,,9931
+2024,2708600,,,,,,,,10383
+2025,2708600,,,,,,,,10122
+2026,2708600,,,,,,,,9669
+2018,2708709,1141,1,0.0876,0.3392,1.6916,35,1.5396,1141
+2019,2708709,1199,1,0.0834,0.3248,1.7793,41,1.5572,1199
+2020,2708709,1140,1,0.0877,0.2189,2.0696,46,1.4779,1140
+2021,2708709,1836,1,0.0545,0.2984,1.7666,42,1.5191,1836
+2022,2708709,2339,1,0.0428,0.2456,2.0301,49,1.6117,2339
+2023,2708709,,,,,,,,1534
+2024,2708709,,,,,,,,1778
+2025,2708709,,,,,,,,2042
+2026,2708709,,,,,,,,2048
+2018,2708808,1894,49,2.5871,0.3596,2.1286,73,1.9787,1894
+2019,2708808,1798,31,1.7241,0.3399,2.2152,74,1.9845,1798
+2020,2708808,1865,40,2.1448,0.3321,2.2595,77,1.9322,1865
+2021,2708808,2084,28,1.3436,0.2742,2.5375,83,1.869,2084
+2022,2708808,2317,55,2.3738,0.1965,2.8452,84,1.8647,2317
+2023,2708808,,,,,,,,1417
+2024,2708808,,,,,,,,1500
+2025,2708808,,,,,,,,1620
+2026,2708808,,,,,,,,1675
+2018,2708907,1536,3,0.1953,0.2008,2.5137,67,2.479,1536
+2019,2708907,1381,6,0.4345,0.1972,2.5076,68,2.6481,1381
+2020,2708907,1529,8,0.5232,0.23,2.4319,74,2.4295,1529
+2021,2708907,1679,5,0.2978,0.2112,2.4581,79,2.3344,1679
+2022,2708907,2158,42,1.9462,0.2375,2.4139,84,2.1951,2158
+2023,2708907,,,,,,,,1086
+2024,2708907,,,,,,,,1107
+2025,2708907,,,,,,,,1209
+2026,2708907,,,,,,,,1279
+2018,2708956,607,0,0,0.7786,0.6558,20,2.1707,607
+2019,2708956,640,0,0,0.7514,0.7197,18,2.1323,640
+2020,2708956,695,0,0,0.7693,0.701,22,2.048,695
+2021,2708956,693,0,0,0.8586,0.4676,22,2.0162,693
+2022,2708956,706,0,0,0.8226,0.5549,19,2.0585,706
+2023,2708956,,,,,,,,84
+2024,2708956,,,,,,,,102
+2025,2708956,,,,,,,,121
+2026,2708956,,,,,,,,117
+2018,2709004,392,0,0,0.7329,0.7534,16,1.719,392
+2019,2709004,427,0,0,0.7309,0.7093,14,1.6293,427
+2020,2709004,354,0,0,0.7754,0.5852,10,1.9009,354
+2021,2709004,416,0,0,0.7493,0.6406,12,1.4415,416
+2022,2709004,373,0,0,0.7148,0.7303,15,2.1821,373
+2023,2709004,,,,,,,,66
+2024,2709004,,,,,,,,68
+2025,2709004,,,,,,,,59
+2026,2709004,,,,,,,,100
+2018,2709103,884,4,0.4525,0.5597,1.4765,52,2.0734,884
+2019,2709103,944,1,0.1059,0.5312,1.5335,51,2.0534,944
+2020,2709103,1107,2,0.1807,0.5654,1.385,44,2.0338,1107
+2021,2709103,1868,0,0,0.6855,1.0539,52,1.8266,1868
+2022,2709103,1229,2,0.1627,0.4983,1.6415,57,1.9904,1229
+2023,2709103,,,,,,,,419
+2024,2709103,,,,,,,,478
+2025,2709103,,,,,,,,540
+2026,2709103,,,,,,,,543
+2018,2709152,4994,1498,29.996,0.2836,2.0737,107,2.0057,4994
+2019,2709152,4945,404,8.1699,0.3081,2.2411,109,1.8588,4945
+2020,2709152,4963,476,9.591,0.2961,2.2694,111,1.8164,4963
+2021,2709152,3819,441,11.5475,0.1163,3.102,118,1.8868,3819
+2022,2709152,3839,419,10.9143,0.0982,3.2892,126,1.9277,3839
+2023,2709152,,,,,,,,2811
+2024,2709152,,,,,,,,2815
+2025,2709152,,,,,,,,3055
+2026,2709152,,,,,,,,2967
+2018,2709202,1541,0,0,0.9438,0.1987,18,1.7339,1541
+2019,2709202,1622,0,0,0.9275,0.2601,22,1.7158,1622
+2020,2709202,671,0,0,0.8436,0.488,19,2.1639,671
+2021,2709202,1650,0,0,0.93,0.2378,18,1.725,1650
+2022,2709202,2012,0,0,0.927,0.2615,23,1.6941,2012
+2023,2709202,,,,,,,,74
+2024,2709202,,,,,,,,73
+2025,2709202,,,,,,,,63
+2026,2709202,,,,,,,,60
+2018,2709301,5027,359,7.1414,0.1221,3.4302,156,1.6942,5027
+2019,2709301,4618,214,4.634,0.1392,3.3318,148,1.7502,4618
+2020,2709301,4572,214,4.6807,0.148,3.2987,145,1.6795,4572
+2021,2709301,4730,210,4.4397,0.1258,3.4454,151,1.6563,4730
+2022,2709301,5450,218,4,0.1128,3.4883,169,1.9032,5450
+2023,2709301,,,,,,,,3693
+2024,2709301,,,,,,,,3924
+2025,2709301,,,,,,,,4021
+2026,2709301,,,,,,,,4308
+2018,2709400,2425,0,0,0.2759,2.345,78,1.717,2425
+2019,2709400,2601,0,0,0.2815,2.321,82,1.8917,2601
+2020,2709400,2203,0,0,0.2035,2.6222,78,1.8846,2203
+2021,2709400,2867,0,0,0.3086,2.207,85,1.8861,2867
+2022,2709400,2453,2,0.0815,0.2088,2.6498,88,1.9749,2453
+2023,2709400,,,,,,,,1501
+2024,2709400,,,,,,,,1545
+2025,2709400,,,,,,,,1653
+2026,2709400,,,,,,,,1790`;
+
+// Parse PAINEL_RAW into a map: id -> {year -> estoque}
+const painelMap = {};
+PAINEL_RAW.split('\n').forEach(line => {
+  const p = line.split(',');
+  const yr = +p[0], id = +p[1], est = p[9]===''||p[9]===undefined ? null : +p[9];
+  if(!painelMap[id]) painelMap[id] = {};
+  painelMap[id][yr] = est;
+});
+
+// Also parse full RAIS-year data for ficha
+const painelFull = {};
+PAINEL_RAW.split('\n').forEach(line => {
+  const p = line.split(',');
+  const yr = +p[0], id = +p[1];
+  if(!painelFull[id]) painelFull[id] = {};
+  painelFull[id][yr] = {
+    vincRais: p[2]===''?null:+p[2],
+    canaVinc: p[3]===''?null:+p[3],
+    pctCana: p[4]===''?null:+p[4],
+    hhi: p[5]===''?null:+p[5],
+    shannon: p[6]===''?null:+p[6],
+    nSetores: p[7]===''?null:+p[7],
+    remSM: p[8]===''?null:+p[8],
+    estoque: p[9]===''?null:+p[9]
+  };
+});
+
+// MC column indices
+const I={id:0,nome:1,vincRais22:2,canaVinc22:3,pctCana22:4,hhi22:5,shannon22:6,nSetores22:7,remSM22:8,grupo:9,vincRais18:10,hhi18:11,shannon18:12,saldo23:13,est23:14,saldo24:15,est24:16,saldo25:17,est25:18,saldo26:19,est26:20,saldoAcum:21,crescPct:22};
+
+// ===== UTILITIES =====
+function fmt(v,d){if(v==null)return'Dado indisponível';return d!=null?v.toFixed(d):v.toLocaleString('pt-BR')}
+function fmtPct(v){if(v==null)return'Dado indisponível';return v.toFixed(2)+'%'}
+function fmtInt(v){if(v==null)return'Dado indisponível';return Math.round(v).toLocaleString('pt-BR')}
+function grupoLabel(g){return g==='Polo_Sucroalcooleiro'?'Polo Sucroalcooleiro':'Baixa Dependência'}
+function grupoClass(g){return g==='Polo_Sucroalcooleiro'?'polo':'baixa'}
+function grupoColor(g){return g==='Polo_Sucroalcooleiro'?'#555555':'#1b9e77'}
+function arrow(v2022,v2018){if(v2022==null||v2018==null)return'';const d=v2022-v2018;if(Math.abs(d)<0.001)return'<span class="stable">→</span>';return d>0?'<span class="up">▲ '+fmt(Math.abs(d),4)+'</span>':'<span class="down">▼ '+fmt(Math.abs(d),4)+'</span>'}
+function median(arr){const s=arr.filter(x=>x!=null).sort((a,b)=>a-b);if(!s.length)return null;const m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2}
+
+// ===== TABS =====
+document.querySelectorAll('nav button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ===== TAB 1: VISÃO ESTADUAL =====
+const nPolo=MC.filter(r=>r[I.grupo]==='Polo_Sucroalcooleiro').length;
+const nBaixa=MC.filter(r=>r[I.grupo]==='Baixa_Dependencia').length;
+const totalVinc22=MC.reduce((s,r)=>s+(r[I.vincRais22]||0),0);
+const totalCana22=MC.reduce((s,r)=>s+(r[I.canaVinc22]||0),0);
+const pctCanaEst=(totalCana22/totalVinc22*100);
+const totalEst22=MC.reduce((s,r)=>s+(r[I.vincRais22]||0),0);
+const totalEst23=MC.reduce((s,r)=>s+(r[I.est23]||0),0);
+const totalEst26=MC.reduce((s,r)=>s+(r[I.est26]||0),0);
+
+document.getElementById('summary-cards').innerHTML=`
+<div class="card polo"><div class="lbl">Municípios Polo Sucroalcooleiro</div><div class="val">${nPolo}</div><div class="lbl">cana ≥ 10% dos vínculos (2022)</div></div>
+<div class="card baixa"><div class="lbl">Municípios Baixa Dependência</div><div class="val">${nBaixa}</div><div class="lbl">cana < 10% dos vínculos (2022)</div></div>
+<div class="card"><div class="lbl">% Vínculos na cana (2022)</div><div class="val">${pctCanaEst.toFixed(2)}%</div><div class="lbl">${fmtInt(totalCana22)} de ${fmtInt(totalVinc22)} vínculos</div></div>
+<div class="card"><div class="lbl">Estoque RAIS 2022</div><div class="val">${fmtInt(totalEst22)}</div><div class="lbl">vínculos formais</div></div>
+<div class="card"><div class="lbl">Estoque CAGED 2023</div><div class="val">${fmtInt(totalEst23)}</div><div class="lbl">somente celetistas</div></div>
+<div class="card"><div class="lbl">Estoque CAGED 2026*</div><div class="val">${fmtInt(totalEst26)}</div><div class="lbl">jan–set (parcial)</div></div>
+`;
+
+const cols=[
+  {key:'nome',label:'Município',fmt:v=>v},
+  {key:'grupo',label:'Grupo',fmt:v=>`<span class="badge ${grupoClass(v)}">${grupoLabel(v)}</span>`},
+  {key:'vincRais22',label:'Vínculos 2022',fmt:fmtInt},
+  {key:'pctCana22',label:'% Cana 2022',fmt:v=>fmtPct(v)},
+  {key:'hhi22',label:'HHI 2022',fmt:v=>fmt(v,4)},
+  {key:'shannon22',label:'Shannon 2022',fmt:v=>fmt(v,4)},
+  {key:'est26',label:'Estoque 2026*',fmt:fmtInt},
+  {key:'saldoAcum',label:'Saldo 2023–26',fmt:fmtInt},
+  {key:'crescPct',label:'Cresc. %',fmt:v=>v!=null?v.toFixed(2)+'%':'—'}
+];
+
+const colMap={nome:I.nome,grupo:I.grupo,vincRais22:I.vincRais22,pctCana22:I.pctCana22,hhi22:I.hhi22,shannon22:I.shannon22,est26:I.est26,saldoAcum:I.saldoAcum,crescPct:I.crescPct};
+
+let sortCol='vincRais22',sortDir=-1;
+function renderTable(){
+  const search=document.getElementById('tbl-search').value.toLowerCase();
+  const filter=document.getElementById('tbl-filter').value;
+  let data=MC.filter(r=>{
+    if(filter&&r[I.grupo]!==filter)return false;
+    if(search&&!r[I.nome].toLowerCase().includes(search))return false;
+    return true;
+  });
+  data.sort((a,b)=>{
+    const ci=colMap[sortCol];
+    let va=a[ci],vb=b[ci];
+    if(typeof va==='string')return sortDir*va.localeCompare(vb,'pt-BR');
+    if(va==null)va=-Infinity;if(vb==null)vb=-Infinity;
+    return sortDir*(va-vb);
+  });
+  document.getElementById('main-thead').innerHTML=cols.map(c=>`<th data-col="${c.key}">${c.label}<span class="arrow">${sortCol===c.key?(sortDir>0?'▲':'▼'):''}</span></th>`).join('');
+  document.getElementById('main-tbody').innerHTML=data.map(r=>
+    `<tr style="cursor:pointer" data-id="${r[I.id]}">${cols.map(c=>`<td>${c.fmt(r[colMap[c.key]])}</td>`).join('')}</tr>`
+  ).join('');
+  document.querySelectorAll('#main-thead th').forEach(th=>{
+    th.onclick=()=>{const c=th.dataset.col;if(sortCol===c)sortDir*=-1;else{sortCol=c;sortDir=-1;}renderTable()};
+  });
+  document.querySelectorAll('#main-tbody tr').forEach(tr=>{
+    tr.onclick=()=>{
+      document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('nav button')[1].classList.add('active');
+      document.getElementById('tab-ficha').classList.add('active');
+      renderFicha(+tr.dataset.id);
+      document.getElementById('ficha-search').value=MC.find(r=>r[I.id]===+tr.dataset.id)[I.nome];
+    };
+  });
+}
+document.getElementById('tbl-search').addEventListener('input',renderTable);
+document.getElementById('tbl-filter').addEventListener('change',renderTable);
+renderTable();
+
+// ===== TAB 2: FICHA =====
+const fichaSearch=document.getElementById('ficha-search');
+const fichaDD=document.getElementById('ficha-dropdown');
+
+fichaSearch.addEventListener('input',()=>{
+  const q=fichaSearch.value.toLowerCase();
+  if(q.length<1){fichaDD.classList.remove('show');return;}
+  const matches=MC.filter(r=>r[I.nome].toLowerCase().includes(q)).slice(0,15);
+  fichaDD.innerHTML=matches.map(r=>`<div data-id="${r[I.id]}">${r[I.nome]} <span class="badge ${grupoClass(r[I.grupo])}" style="font-size:.65rem">${grupoLabel(r[I.grupo])}</span></div>`).join('');
+  fichaDD.classList.add('show');
+  fichaDD.querySelectorAll('div').forEach(d=>{
+    d.onclick=()=>{fichaSearch.value=MC.find(r=>r[I.id]===+d.dataset.id)[I.nome];fichaDD.classList.remove('show');renderFicha(+d.dataset.id)};
+  });
+});
+fichaSearch.addEventListener('blur',()=>setTimeout(()=>fichaDD.classList.remove('show'),200));
+
+function renderFicha(id){
+  const m=MC.find(r=>r[I.id]===id);if(!m)return;
+  const c=document.getElementById('ficha-content');
+  const g=m[I.grupo];
+  const isCanapi=m[I.nome]==='Canapi';
+  const groupData=MC.filter(r=>r[I.grupo]===g);
+  const allData=MC;
+
+  // Medians
+  const medGrpHHI=median(groupData.map(r=>r[I.hhi22]));
+  const medGrpShannon=median(groupData.map(r=>r[I.shannon22]));
+  const medGrpPctCana=median(groupData.map(r=>r[I.pctCana22]));
+  const medGrpRem=median(groupData.map(r=>r[I.remSM22]));
+  const medEstHHI=median(allData.map(r=>r[I.hhi22]));
+  const medEstShannon=median(allData.map(r=>r[I.shannon22]));
+  const medEstPctCana=median(allData.map(r=>r[I.pctCana22]));
+  const medEstRem=median(allData.map(r=>r[I.remSM22]));
+
+  // Indicators 2022 vs 2018
+  const pf=painelFull[id];
+  const d18=pf?pf[2018]:null;
+  const d22=pf?pf[2022]:null;
+
+  let warnings='';
+  const latestEst=m[I.est26]||m[I.est25]||m[I.est24]||m[I.est23];
+  if(latestEst!=null&&latestEst<200) warnings+=`<div class="warning">⚠ Município com estoque inferior a 200 vínculos (CAGED). Variações percentuais são instáveis e devem ser interpretadas com cautela.</div>`;
+  if(isCanapi) warnings+=`<div class="canapi-note">⚠ <strong>Canapi</strong>: dados de estoque CAGED indisponíveis em 2023 e 2024. Salto atípico em 2026 (de 147 para 1.241 vínculos).</div>`;
+
+  let html=`${warnings}
+  <div class="ficha-grid">
+    <div class="ficha-card">
+      <h3>Perfil — ${m[I.nome]}</h3>
+      <div class="ind-row"><span>Grupo</span><span class="badge ${grupoClass(g)}">${grupoLabel(g)}</span></div>
+      <div class="ind-row"><span>Vínculos RAIS 2022</span><span>${fmtInt(m[I.vincRais22])}</span></div>
+      <div class="ind-row"><span>Vínculos RAIS 2018</span><span>${fmtInt(m[I.vincRais18])}</span></div>
+      <div class="ind-row"><span>Nº de setores (2022)</span><span>${fmtInt(m[I.nSetores22])}</span></div>
+      <div class="ind-row"><span>Remuneração média (SM, 2022)</span><span>${fmt(m[I.remSM22],2)}</span></div>
+    </div>
+    <div class="ficha-card">
+      <h3>Indicadores 2022 vs 2018</h3>
+      <div class="ind-row"><span>% Cana</span><span>${fmtPct(m[I.pctCana22])} ${d18?arrow(m[I.pctCana22],d18.pctCana):''}</span></div>
+      <div class="ind-row"><span>HHI</span><span>${fmt(m[I.hhi22],4)} ${arrow(m[I.hhi22],m[I.hhi18])}</span></div>
+      <div class="ind-row"><span>Shannon</span><span>${fmt(m[I.shannon22],4)} ${arrow(m[I.shannon22],m[I.shannon18])}</span></div>
+      <div class="ind-row"><span>Remuneração (SM)</span><span>${fmt(m[I.remSM22],2)} ${d18?arrow(m[I.remSM22],d18.remSM):''}</span></div>
+    </div>
+  </div>
+  <div class="ficha-grid">
+    <div class="ficha-card">
+      <h3>Posição frente às medianas (2022)</h3>
+      ${makeMedianRow('HHI',m[I.hhi22],medGrpHHI,medEstHHI,0,1)}
+      ${makeMedianRow('Shannon',m[I.shannon22],medGrpShannon,medEstShannon,0,5)}
+      ${makeMedianRow('% Cana',m[I.pctCana22],medGrpPctCana,medEstPctCana,0,80)}
+      ${makeMedianRow('Rem. SM',m[I.remSM22],medGrpRem,medEstRem,0,4)}
+    </div>
+    <div class="ficha-card">
+      <h3>Emprego CAGED 2023–2026</h3>
+      <div class="ind-row"><span>Saldo acumulado</span><span><strong>${fmtInt(m[I.saldoAcum])}</strong></span></div>
+      <div class="ind-row"><span>Crescimento</span><span><strong>${m[I.crescPct]!=null?m[I.crescPct].toFixed(2)+'%':'—'}</strong></span></div>
+      <div class="ind-row"><span>Estoque 2023</span><span>${fmtInt(m[I.est23])}</span></div>
+      <div class="ind-row"><span>Estoque 2024</span><span>${fmtInt(m[I.est24])}</span></div>
+      <div class="ind-row"><span>Estoque 2025</span><span>${fmtInt(m[I.est25])}</span></div>
+      <div class="ind-row"><span>Estoque 2026 (jan–set)</span><span>${fmtInt(m[I.est26])}</span></div>
+    </div>
+  </div>
+  <div class="chart-container">
+    <h3>Evolução do emprego formal — ${m[I.nome]}</h3>
+    <div id="ficha-chart"></div>
+    <div class="chart-note">RAIS (2018–2022): todos os vínculos formais. Novo CAGED (2023–2026): somente celetistas. As séries não são comparáveis em nível. 2026: dados parciais (jan–set).</div>
+  </div>`;
+  c.innerHTML=html;
+
+  // Draw chart
+  const ts=painelMap[id];
+  if(ts) drawEvolutionChart('ficha-chart',ts,grupoColor(g));
+}
+
+function makeMedianRow(label,val,medGrp,medEst,min,max){
+  if(val==null)return`<div class="ind-row"><span>${label}</span><span>Dado indisponível</span></div>`;
+  const pct=v=>Math.max(0,Math.min(100,((v-min)/(max-min))*100));
+  return`<div style="margin:8px 0">
+    <div style="font-size:.8rem;margin-bottom:3px"><strong>${label}</strong>: ${fmt(val,4)}</div>
+    <div class="median-bar">
+      <span style="font-size:.7rem;width:50px">Grupo</span>
+      <div class="bar-bg">
+        <div class="bar-fill" style="width:${pct(val)}%;background:${val>medGrp?'#e67e22':'#3498db'};opacity:.4"></div>
+        ${medGrp!=null?`<div class="bar-mark" style="left:${pct(medGrp)}%;background:#e67e22" title="Mediana grupo: ${fmt(medGrp,4)}"></div>`:''}
+        <div class="bar-mark" style="left:${pct(val)}%;background:#222;width:3px" title="${label}: ${fmt(val,4)}"></div>
+      </div>
+    </div>
+    <div class="median-bar">
+      <span style="font-size:.7rem;width:50px">Estado</span>
+      <div class="bar-bg">
+        <div class="bar-fill" style="width:${pct(val)}%;background:#8e44ad;opacity:.3"></div>
+        ${medEst!=null?`<div class="bar-mark" style="left:${pct(medEst)}%;background:#8e44ad" title="Mediana estadual: ${fmt(medEst,4)}"></div>`:''}
+        <div class="bar-mark" style="left:${pct(val)}%;background:#222;width:3px" title="${label}: ${fmt(val,4)}"></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function drawEvolutionChart(containerId,ts,color){
+  const container=document.getElementById(containerId);
+  const W=Math.min(container.clientWidth||700,900),H=320;
+  const pad={t:30,r:30,b:50,l:70};
+  const years=[2018,2019,2020,2021,2022,2023,2024,2025,2026];
+  const vals=years.map(y=>ts[y]!=null?ts[y]:null);
+  const validVals=vals.filter(v=>v!=null);
+  if(!validVals.length){container.innerHTML='<p style="color:var(--text2)">Sem dados disponíveis.</p>';return;}
+  const maxV=Math.max(...validVals)*1.1;
+  const minV=0;
+  const xScale=i=>pad.l+i*(W-pad.l-pad.r)/(years.length-1);
+  const yScale=v=>pad.t+(1-(v-minV)/(maxV-minV))*(H-pad.t-pad.b);
+
+  let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="max-width:100%">`;
+  // Grid
+  const nTicks=5;
+  for(let i=0;i<=nTicks;i++){
+    const v=minV+(maxV-minV)*i/nTicks;
+    const y=yScale(v);
+    svg+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="#eee" stroke-width="1"/>`;
+    svg+=`<text x="${pad.l-8}" y="${y+4}" text-anchor="end" fill="#888" font-size="11">${fmtInt(Math.round(v))}</text>`;
+  }
+  // X axis labels
+  years.forEach((yr,i)=>{
+    const x=xScale(i);
+    svg+=`<text x="${x}" y="${H-pad.b+20}" text-anchor="middle" fill="#888" font-size="11">${yr}${yr===2026?'*':''}</text>`;
+  });
+  // Vertical break line
+  const breakX=(xScale(4)+xScale(5))/2;
+  svg+=`<line x1="${breakX}" y1="${pad.t}" x2="${breakX}" y2="${H-pad.b}" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+  svg+=`<text x="${breakX}" y="${pad.t-8}" text-anchor="middle" fill="#999" font-size="9">Quebra de série</text>`;
+  svg+=`<text x="${breakX}" y="${pad.t+4}" text-anchor="middle" fill="#999" font-size="8">RAIS → Novo CAGED</text>`;
+
+  // RAIS series (2018-2022)
+  let raisPoints=[];
+  for(let i=0;i<=4;i++){if(vals[i]!=null)raisPoints.push([xScale(i),yScale(vals[i]),vals[i],years[i]]);}
+  if(raisPoints.length>1){
+    svg+=`<polyline points="${raisPoints.map(p=>p[0]+','+p[1]).join(' ')}" fill="none" stroke="${color}" stroke-width="2.5"/>`;
+  }
+  raisPoints.forEach(p=>{
+    svg+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${color}" stroke="#fff" stroke-width="2" data-tip="${p[3]}: ${fmtInt(p[2])} (RAIS)"/>`;
+  });
+
+  // CAGED series (2023-2026)
+  let cagedPoints=[];
+  for(let i=5;i<=8;i++){if(vals[i]!=null)cagedPoints.push([xScale(i),yScale(vals[i]),vals[i],years[i],i===8]);}
+  if(cagedPoints.length>1){
+    svg+=`<polyline points="${cagedPoints.map(p=>p[0]+','+p[1]).join(' ')}" fill="none" stroke="${color}" stroke-width="2.5" stroke-dasharray="8,4"/>`;
+  }
+  cagedPoints.forEach(p=>{
+    if(p[4]){// 2026 hollow
+      svg+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#fff" stroke="${color}" stroke-width="2.5" data-tip="${p[3]}: ${fmtInt(p[2])} (CAGED, jan–set)"/>`;
+    } else {
+      svg+=`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${color}" stroke="#fff" stroke-width="2" data-tip="${p[3]}: ${fmtInt(p[2])} (CAGED)"/>`;
+    }
+  });
+
+  // Y axis label
+  svg+=`<text x="14" y="${H/2}" text-anchor="middle" fill="#888" font-size="11" transform="rotate(-90,14,${H/2})">Vínculos formais</text>`;
+
+  svg+=`</svg>`;
+  container.innerHTML=svg;
+
+  // Tooltips
+  const tip=document.getElementById('tooltip');
+  container.querySelectorAll('circle').forEach(c=>{
+    c.addEventListener('mouseenter',e=>{
+      tip.textContent=c.dataset.tip;
+      tip.style.display='block';
+      const r=container.getBoundingClientRect();
+      tip.style.left=(e.clientX-r.left+10)+'px';
+      tip.style.top=(e.clientY-r.top-30)+'px';
+    });
+    c.addEventListener('mouseleave',()=>tip.style.display='none');
+  });
+}
+
+// ===== TAB 3: COMPARADOR =====
+[1,2,3].forEach(n=>{
+  const sel=document.getElementById('comp'+n);
+  MC.forEach(r=>{sel.innerHTML+=`<option value="${r[I.id]}">${r[I.nome]}</option>`});
+  sel.addEventListener('change',renderComparador);
+});
+
+function renderComparador(){
+  const ids=[1,2,3].map(n=>+document.getElementById('comp'+n).value).filter(v=>v);
+  const grid=document.getElementById('comp-grid');
+  if(!ids.length){grid.innerHTML='<p style="color:var(--text2)">Selecione ao menos um município.</p>';return;}
+  grid.innerHTML=ids.map(id=>{
+    const m=MC.find(r=>r[I.id]===id);if(!m)return'';
+    const g=m[I.grupo];
+    const isCanapi=m[I.nome]==='Canapi';
+    const latestEst=m[I.est26]||m[I.est25]||m[I.est24]||m[I.est23];
+    let warn='';
+    if(latestEst!=null&&latestEst<200) warn+=`<div class="warning" style="margin-top:8px">⚠ Estoque < 200: variações instáveis.</div>`;
+    if(isCanapi) warn+=`<div class="canapi-note" style="margin-top:8px">⚠ Canapi: estoque CAGED indisponível 2023–2024. Salto atípico em 2026.</div>`;
+    return`<div class="comp-col">
+      <h3>${m[I.nome]} <span class="badge ${grupoClass(g)}">${grupoLabel(g)}</span></h3>
+      <div class="ind-row"><span>Vínculos RAIS 2022</span><span>${fmtInt(m[I.vincRais22])}</span></div>
+      <div class="ind-row"><span>% Cana 2022</span><span>${fmtPct(m[I.pctCana22])}</span></div>
+      <div class="ind-row"><span>HHI 2022</span><span>${fmt(m[I.hhi22],4)}</span></div>
+      <div class="ind-row"><span>Shannon 2022</span><span>${fmt(m[I.shannon22],4)}</span></div>
+      <div class="ind-row"><span>Nº setores 2022</span><span>${fmtInt(m[I.nSetores22])}</span></div>
+      <div class="ind-row"><span>Rem. média (SM)</span><span>${fmt(m[I.remSM22],2)}</span></div>
+      <div class="ind-row" style="border-top:2px solid #eee;padding-top:8px"><span>Estoque 2023</span><span>${fmtInt(m[I.est23])}</span></div>
+      <div class="ind-row"><span>Estoque 2024</span><span>${fmtInt(m[I.est24])}</span></div>
+      <div class="ind-row"><span>Estoque 2025</span><span>${fmtInt(m[I.est25])}</span></div>
+      <div class="ind-row"><span>Estoque 2026*</span><span>${fmtInt(m[I.est26])}</span></div>
+      <div class="ind-row" style="border-top:2px solid #eee;padding-top:8px"><span>Saldo acumulado</span><span><strong>${fmtInt(m[I.saldoAcum])}</strong></span></div>
+      <div class="ind-row"><span>Crescimento</span><span><strong>${m[I.crescPct]!=null?m[I.crescPct].toFixed(2)+'%':'—'}</strong></span></div>
+      ${warn}
+      <div id="comp-chart-${id}" style="margin-top:12px"></div>
+    </div>`;
+  }).join('');
+
+  ids.forEach(id=>{
+    const m=MC.find(r=>r[I.id]===id);
+    const ts=painelMap[id];
+    if(ts) drawEvolutionChart('comp-chart-'+id,ts,grupoColor(m[I.grupo]));
+  });
+}
+
+// ===== VALIDATION LOG (console) =====
+console.log('=== VALIDAÇÃO ===');
+console.log('Total municípios:',MC.length);
+console.log('Polos:',nPolo,'Baixa:',nBaixa);
+const atalaia=MC.find(r=>r[I.nome]==='Atalaia');
+console.log('Atalaia 2022: pct_cana=',atalaia[I.pctCana22],'HHI=',atalaia[I.hhi22],'Shannon=',atalaia[I.shannon22]);
+// Sum estoque 2022: sum of vinculos_rais_2022 (which = estoque_unificado for RAIS years)
+const sumEst22=MC.reduce((s,r)=>s+r[I.vincRais22],0);
+console.log('Soma estoque 2022 (RAIS):',sumEst22);
+const sumEst23=MC.reduce((s,r)=>s+(r[I.est23]||0),0);
+console.log('Soma estoque 2023 (CAGED):',sumEst23);
+const canapi=MC.find(r=>r[I.nome]==='Canapi');
+console.log('Canapi est2023:',canapi[I.est23],'est2024:',canapi[I.est24],'(should be null)');
+</script>
+</body>
+</html>
