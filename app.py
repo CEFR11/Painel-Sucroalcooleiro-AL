@@ -157,7 +157,7 @@ with tab1:
         yaxis_title="Shannon (maior = mais diversificado)",
         height=450, legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5)
     )
-    st.plotly_chart(fig_scatter, use_container_width=True)
+    st.plotly_chart(fig_scatter, use_container_width=True, key="scatter_visao")
 
     # Saldo CAGED acumulado
     st.subheader("Saldo CAGED Acumulado 2023–2026")
@@ -206,7 +206,7 @@ with tab2:
         st.markdown('<div class="aviso">⚠️ Canapi: dados de estoque CAGED indisponíveis para 2023 e 2024. Salto atípico em 2026 (147→1.241) deve ser interpretado com cautela.</div>', unsafe_allow_html=True)
 
     # Gráfico evolução
-    st.plotly_chart(grafico_evolucao(mun_p, sel), use_container_width=True)
+    st.plotly_chart(grafico_evolucao(mun_p, sel), use_container_width=True, key="evolucao_ficha")
 
     # Tabela anual
     st.subheader("Dados Anuais")
@@ -277,9 +277,9 @@ with tab3:
     pb = painel[painel["nome_municipio"] == mun_b]
     gc1, gc2 = st.columns(2)
     with gc1:
-        st.plotly_chart(grafico_evolucao(pa, mun_a), use_container_width=True)
+        st.plotly_chart(grafico_evolucao(pa, mun_a), use_container_width=True, key="evolucao_comp_a")
     with gc2:
-        st.plotly_chart(grafico_evolucao(pb, mun_b), use_container_width=True)
+        st.plotly_chart(grafico_evolucao(pb, mun_b), use_container_width=True, key="evolucao_comp_b")
 
 # ═══════════════════════════════════════════
 # TAB 4 — Metodologia
