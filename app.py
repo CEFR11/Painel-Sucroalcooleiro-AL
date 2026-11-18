@@ -64,7 +64,7 @@ def metric_card(titulo, valor):
 # ── Gráfico de evolução emprego com quebra de série ──
 def grafico_evolucao(mun_painel, nome):
     rais = mun_painel[mun_painel["fonte_dados"] == "RAIS_2018_2022"].sort_values("ano")
-    caged = mun_painel[mun_painel["fonte_dados"] == "CAGED_2023_2026"].sort_values("ano")
+    caged = mun_painel[mun_painel["fonte_dados"] == "Novo_CAGED_2023_2026"].sort_values("ano")
 
     fig = go.Figure()
 
@@ -297,7 +297,7 @@ with tab4:
     st.markdown("""
 - **RAIS (2018–2022)**: Relação Anual de Informações Sociais do Ministério do Trabalho. Inclui vínculos CLT, estatutários e militares.
 - **Novo CAGED (2023–2026)**: Cadastro Geral de Empregados e Desempregados. Captura apenas movimentações CLT — **não inclui estatutários**.
-- **2026**: dados parciais (janeiro a maio). Marcado com indicador oco nos gráficos.
+- **2026**: dados parciais (janeiro a setembro). Marcado com indicador oco nos gráficos.
 """)
 
     st.subheader("Quebra de Série RAIS → CAGED")
@@ -319,6 +319,11 @@ No painel, a transição é sinalizada por:
 - **HHI (Herfindahl-Hirschman)**: soma dos quadrados das participações setoriais. Varia de ~0 (diversificado) a 1 (monopólio). Calculado sobre vínculos RAIS 2022.
 - **Entropia de Shannon**: mede a diversidade setorial. Maior = mais diversificado. Calculado sobre vínculos RAIS 2022.
 - **% Cana**: participação dos CNAEs sucroalcooleiros ({CANA_CNAES}) no total de vínculos RAIS 2022.
+
+⚠️ **Limitação — Administração pública**: em municípios pequenos, a administração pública municipal
+costuma concentrar grande parte dos vínculos formais, inflando o HHI e reduzindo a entropia de Shannon
+independentemente da presença sucroalcooleira. Ao interpretar esses indicadores, considere que valores
+altos de HHI podem refletir dependência do setor público, e não necessariamente do setor canavieiro.
 """)
 
     st.subheader("Classificação dos Municípios")
