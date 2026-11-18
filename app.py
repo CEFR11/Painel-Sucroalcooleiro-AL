@@ -8,11 +8,17 @@ st.set_page_config(page_title="Painel Sucroalcooleiro — Alagoas", layout="wide
 st.markdown("""
 <style>
     .metric-card {
-        background: #f8f9fa; border-radius: 10px; padding: 18px; text-align: center;
-        border: 1px solid #dee2e6; margin-bottom: 10px;
+        background: rgba(128,128,128,0.1); border-radius: 10px; padding: 18px; text-align: center;
+        border: 1px solid rgba(128,128,128,0.25); margin-bottom: 10px;
     }
-    .metric-card h3 { margin: 0; font-size: 14px; color: #666; }
-    .metric-card p { margin: 4px 0 0; font-size: 28px; font-weight: 700; }
+    .metric-card h3 { margin: 0; font-size: 14px; color: #888; }
+    .metric-card p { margin: 4px 0 0; font-size: 28px; font-weight: 700; color: #1a1a2e; }
+    @media (prefers-color-scheme: dark) {
+        .metric-card p { color: #f0f0f0; }
+        .metric-card h3 { color: #aaa; }
+    }
+    [data-theme="dark"] .metric-card p { color: #f0f0f0; }
+    [data-theme="dark"] .metric-card h3 { color: #aaa; }
     .aviso { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 12px; font-size: 13px; }
     .polo-tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
     .polo-polo { background: #555; color: #fff; }
